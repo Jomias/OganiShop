@@ -1,0 +1,363 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<!-- Categories Section Begin -->
+
+<section class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="hero__categories">
+                    <div class="hero__categories__all">
+                        <i class="fa fa-bars"></i>
+                        <span>All departments</span>
+                    </div>
+                    <ul id="department">
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="hero__search">
+                    <div class="hero__search__form">
+                        <form action="#">
+                            <div class="hero__search__categories">
+                                All Categories
+                                <span class="arrow_carrot-down"></span>
+                            </div>
+                            <input type="text" placeholder="What do yo u need?">
+                            <button type="submit" class="site-btn">SEARCH</button>
+                        </form>
+                    </div>
+                    <div class="hero__search__phone">
+                        <div class="hero__search__phone__icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="hero__search__phone__text">
+                            <h5>+65 11.188.888</h5>
+                            <span>support 24/7 time</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="hero-banner">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="categories">
+    <div class="container">
+        <div class="row">
+            <div class="categories__slider owl-carousel" id="categories">
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Categories Section End -->
+
+<!-- Featured Section Begin -->
+<section class="featured spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Featured Product</h2>
+                </div>
+                <div class="featured__controls">
+                    <ul id="featured-categories">
+                        <li data-filter="*" class="active mixitup-control-active">All</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row featured__filter" id="category-filter">
+        </div>
+    </div>
+</section>
+<!-- Featured Section End -->
+
+<!-- Banner Begin -->
+<div class="banner">
+    <div class="container">
+        <div class="row small-banner">
+        </div>
+    </div>
+</div>
+<!-- Banner End -->
+<!-- Latest Product Section Begin -->
+<section class="latest-product spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="latest-product__text">
+                    <h4>Latest Products</h4>
+                    <div class="latest-product__slider owl-carousel" id="latest-product1">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="latest-product__text">
+                    <h4>Top Rated Products</h4>
+                    <div class="latest-product__slider owl-carousel" id="latest-product2">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="latest-product__text">
+                    <h4>Review Products</h4>
+                    <div class="latest-product__slider owl-carousel" id="latest-product3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Latest Product Section End -->
+<!-- Blog Section Begin -->
+<section class="from-blog spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title from-blog__title">
+                    <h2>From The Blog</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="blog">
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+
+<script>
+    // category
+    $.ajax({
+        url: "/Home/GetAllCategories",
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            $('#department').append('<li><a href="/ShoppingGrid/Index" class="category">All</a></li>');
+            data.forEach(function (item, index) {
+                let row = `<li><a href="/ShoppingGrid/Index?id=${item.id}" class="category">${item.name}</a></li>`;
+                $('#department').append(row);
+            })
+        },
+        error: function () {
+
+        },
+        complete: function () {
+
+        }
+    });
+
+    // category carousel
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Home/GetCategoryCarousel",
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                data.forEach(function (item, index) {
+                    let row = `<div class="col-lg-3">
+                                        <div class="categories__item set-bg" data-setbg="${item.filePath}" style="background-image: url(${item.filePath});">
+                                            <h5><a href="/ShoppingGrid/Index?id=${item.id}">${item.name}</a></h5>
+                                        </div>
+                                    </div>`;
+                    $('#categories').owlCarousel().trigger('add.owl.carousel', row);
+                });
+                $('#categories').trigger('refresh.owl.carousel');
+            },
+            error: function () {
+
+            },
+            complete: function () {
+
+            }
+        });
+        $('#categories').carousel();
+        $('#categories').trigger('next.owl.carousel', 1);
+    });
+
+    // banner 
+    $.ajax({
+        url: "/Home/GetBanner",
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+            let row =
+                `<div class="hero__item set-bg" data-setbg="${data[0].imagePath}" style="background-image:url(${data[0].imagePath});">
+                        <div class="hero__text">
+                            <span>FRUIT FRESH</span>
+                            <h2>Vegetable <br />100% Organic</h2>
+                            <p>Free Pickup and Delivery Available</p>
+                            <a href="/ShoppingGrid/Index" class="primary-btn">SHOP NOW</a>
+                        </div>
+                    </div>`;
+            $('#hero-banner').html(row);
+            $('.small-banner').html('');
+            data.forEach(function (item, index) {
+                if (index > 0) {
+                    let row = `<div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="banner__pic">
+                                            <img src="${item.imagePath}" alt="">
+                                        </div>
+                                </div>`;
+                    $('.small-banner').append(row);
+                }
+            });
+        },
+        error: function () {
+
+        },
+        complete: function () {
+
+        }
+    });
+
+    //latest product
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Home/GetLatestProducts",
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                let row = `<div class="latest-prdouct__slider__item">`
+
+                data.forEach(function (item, index) {
+                    var money = parseFloat(item.price).toFixed(2);
+                    let z = `                        
+                            <a href="/ProductDetail/Index?id=${item.id}" class="latest-product__item">
+                                <div class="latest-product__item__pic">
+                                    <img src="${item.avatar}" alt="">
+                                </div>
+                                <div class="latest-product__item__text">
+                                    <h6>${item.name}</h6>
+                                    <span>$${money}</span>
+                                </div>
+                            </a>`;
+                    row += z;
+                    if (index % 3 == 2) {
+                        row += `</div>`;
+                        $('#latest-product1').owlCarousel().trigger('add.owl.carousel', row);
+                        $('#latest-product2').owlCarousel().trigger('add.owl.carousel', row);
+                        $('#latest-product3').owlCarousel().trigger('add.owl.carousel', row);
+                        row = `<div class="latest-prdouct__slider__item">`
+                    }
+                });
+                if (data.length % 3 != 0) {
+                    row += `</div>`;
+                    $('#latest-product1').owlCarousel().trigger('add.owl.carousel', row);
+                    $('#latest-product2').owlCarousel().trigger('add.owl.carousel', row);
+                    $('#latest-product3').owlCarousel().trigger('add.owl.carousel', row);
+                }
+                $('#latest-product1').trigger('refresh.owl.carousel');
+                $('#latest-product2').trigger('refresh.owl.carousel');
+                $('#latest-product3').trigger('refresh.owl.carousel');
+            },
+            error: function () {
+
+            },
+            complete: function () {
+
+            }
+        });
+        $('#latest-product').carousel();
+        $('#latest-product').trigger('next.owl.carousel', 1);
+    });
+
+
+    // blog
+    $.ajax({
+        url: "/Home/GetLatestBlogs",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+            data.forEach(function (item, index) {
+                let row = ` <div class="col-lg-4 col-md-4 col-sm-6">
+                                    <div class="blog__item">
+                                        <div class="blog__item__pic">
+                                            <img src="${item.blogAvatarFilePath}" alt="" style="width: 360px; height: 260px">
+                                        </div>
+                                        <div class="blog__item__text">
+                                            <ul>
+                                                <li><i class="fa fa-calendar-o"></i>${item.createdDate}</li>
+                                                <li><i class="fa fa-comment-o"></i> 5</li>
+                                            </ul>
+                                            <h5><a href="/BlogDetail/Post?id=${item.id}">${item.title}</a></h5>
+                                            <p>${item.description}</p>
+                                        </div>
+                                    </div>
+                                </div>`
+                $('#blog').append(row);
+            });
+        }
+    })
+    $.ajax({
+        url: "/Home/GetFeaturedProduct",
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () { },
+        success: function (data) {
+            data.forEach(function (item, index) {
+                let row = `<li data-filter=".${item.categorySlug}">${item.categoryName}</li>`;
+                $('#featured-categories').append(row);
+
+                item.listProduct.forEach(function (itm, index) {
+                    let price = parseFloat(itm.price).toFixed(2);
+                    let r = `<div class="col-lg-3 col-md-4 col-sm-6 mix ${item.categorySlug}">
+                                    <div class="featured__item">
+                                        <div class="featured__item__pic set-bg" style="background-image: url(${itm.avatar})">
+                                            <ul class="featured__item__pic__hover" id="${itm.id}">
+                                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                                <li><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="featured__item__text">
+                                            <h6><a href="/ProductDetail/Index?id=${itm.id}">${itm.name}</a></h6>
+                                            <h5>$${price}</h5>
+                                        </div>
+                                    </div>
+                                </div>`
+                    $('#category-filter').append(r);
+                })
+            });
+        },
+        error: function () { },
+        complete: function () { }
+    });
+
+    $(document).on('click', '.add-to-cart', function(e) {
+        e.preventDefault();
+        let id = $(this).closest('ul').attr('id');
+        $.ajax({
+            url: "/ShoppingCart/AddOrUpdateCartItem",
+            type: "POST",
+            data: {
+                id: id,
+            },
+            dataType: "json",
+            beforeSend: function () { },
+            success: function (data) {
+                alert("Đã thêm sản phẩm vào giỏ hàng");
+            },
+            error: function () { },
+            complete: function () { }
+        });
+    });
+
+</script>
+}
