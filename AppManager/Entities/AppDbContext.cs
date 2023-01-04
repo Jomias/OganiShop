@@ -23,7 +23,7 @@ namespace AppManager.Entities
         public DbSet<TagEntity> TagEntities { get; set; }
         public DbSet<AccountImageEntity> AccountImageEntities { get; set; }
         public DbSet<UserEntity> UserEntities { get; set; }
-
+        public DbSet<ContactMessageEntity> ContactMessageEntities { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderDetailEntity>().HasKey(l => new { l.ShopOrderId, l.ProductId });

@@ -1,6 +1,8 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace AppManager.Common
 {

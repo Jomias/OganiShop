@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Quản lý danh mục";
     string error = TempData["error"] as string;
 }
 
@@ -9,7 +9,7 @@
         &nbsp;
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/Admin/Home"><i class="fa fa-dashboard"></i>Home</a></li>
         <li><a href="#">Danh mục</a></li>
         <li class="active">Quản lý danh mục</li>
     </ol>
@@ -18,7 +18,7 @@
 <section class="content">
     <div class="box box-info">
         <div class="box-header with-border container" style="width:80%">
-            <h3 class="box-title">&nbsp;&nbsp;&nbsp; Quản lý danh mục</h3>
+            <h3 class="box-title">&nbsp;&nbsp;&nbsp; @ViewBag.Type danh mục</h3>
         </div>
         <!-- /.box-header -->
         <!-- form start -->
@@ -27,16 +27,16 @@
                 <div class="box-body">
                     <div class="form-group">
                         <input type="number" name="id" value="@(Model.Id == 0 ? 0 : Model.Id)" hidden>
-                        <input type="text" name="filepath" value="@(Model.Id == 0 ? "" : Model.FilePath)" id="file-path" hidden>
-                        <input type="text" name="fileid" value="@(Model.Id == 0 ? "" : Model.FileId)" id="file-id" hidden>
+                        <input type="text" name="filePath" value="@(Model.Id == 0 ? "" : Model.FilePath)" id="file-path" hidden>
+                        <input type="text" name="fileId" value="@(Model.Id == 0 ? "" : Model.FileId)" id="file-id" hidden>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Tên danh mục</label>
+                        <label>Tên danh mục</label>
                         <input type="text" class="form-control" name="name" value="@(Model.Id == 0 ? "" : Model.Name)">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputFile">Upload ảnh</label>
-                        <img src="@(Model.Id == 0 ? "/img/default.jpg" : Model.FilePath)" id="image-upload" class="rounded mx-auto d-block" style="width: 100%" />
+                        <label for="exampleInputFile" style="display:block">Upload ảnh</label>
+                        <img src="@(Model.Id == 0 ? "/img/default.jpg" : Model.FilePath)" id="image-upload" class="rounded mx-auto d-block" style="width: 300px;height: 300px" />
                         <input type="file" name="fileUpload" id="exampleInputFile">
                         <i class="help-block">Upload ảnh đại diện của danh mục</i>
                     </div>

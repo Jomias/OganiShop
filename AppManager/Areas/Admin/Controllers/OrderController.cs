@@ -12,7 +12,7 @@ using System.Linq;
 namespace AppManager.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "admin,staff")]
+    [Authorize(Roles = "admin, staff")]
     public class OrderController : Controller
     {
         private readonly AppDbContext _dbContext;
@@ -23,7 +23,7 @@ namespace AppManager.Areas.Admin.Controllers
         }
         public IActionResult Index(int pageNumber = 1)
         {
-            int pageSize = 5;
+            int pageSize = 6;
             var query = (from b1 in _dbContext.ShopOrderEntities
                          join b2 in _dbContext.AccountManagerEntities on b1.Account equals b2.Account into tbl
                          from t in tbl.DefaultIfEmpty()
@@ -35,13 +35,14 @@ namespace AppManager.Areas.Admin.Controllers
                              TotalPrice = b1.TotalPrice,
                              Account = t.Account == null ? null : b1.Account,
                              CreatedDate = b1.CreatedDate,
-                         }).ToList();
+                         }).OrderBy(x => x.OrderStatus).ToList();
             var total = query.Count();
             ViewBag.pageCount = Math.Ceiling((decimal)total / pageSize);
             ViewBag.pageNumber = pageNumber;
             ViewBag.pageSize = pageSize;
             var listCategory = query.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToList();
-            return View(query);
+        
+            return View(listCategory);
         }
 
         public IActionResult OrderDetail(int id)
@@ -78,16 +79,48 @@ namespace AppManager.Areas.Admin.Controllers
                 ListOrderDetail = orderDetail,
             });
         }
+
         public IActionResult Delete(int id)
         {
             var entity = _dbContext.ShopOrderEntities.Find(id);
             entity.IsDeleted = true;
             _dbContext.ShopOrderEntities.Update(entity);
-            var detail = _dbContext.OrderDetailEntities.Where(x => x.ShopOrderId == id).Select(x => x).ToList();
+            var detail = _dbContext.OrderDetailEntities.Where(x => x.ShopOrderId == id).ToList();
             foreach (var item in detail)
             {
                 item.IsDeleted = true;
                 _dbContext.OrderDetailEntities.Update(item);
+            }
+            _dbContext.SaveChanges();
+            return Redirect("/Admin/Order/Index");
+        }
+
+        public IActionResult Cancel(int id)
+        {
+            var entity = _dbContext.ShopOrderEntities.Find(id);
+            entity.OrderStatus = 4;
+            _dbContext.ShopOrderEntities.Update(entity);
+            _dbContext.SaveChanges();
+            return Redirect("/Admin/Order/Index");
+        }
+
+        public IActionResult Confirm(int id)
+        {
+            var entity = _dbContext.ShopOrderEntities.Find(id);
+            entity.OrderStatus = 2;
+            var orders = _dbContext.OrderDetailEntities
+                .Where(x => x.ShopOrderId == id)
+                .Select(x => new {
+                    Id = x.ProductId,
+                    Quantity = x.Quantity,
+                }).ToList();
+            _dbContext.ShopOrderEntities.Update(entity);
+            foreach(var item in orders)
+            {
+                var temp = _dbContext.ProductEntities.Find(item.Id);
+                temp.Status = temp.Quantity - item.Quantity <= 0 ? 1 : temp.Status;
+                temp.Quantity -= item.Quantity;
+                _dbContext.ProductEntities.Update(temp);
             }
             _dbContext.SaveChanges();
             return Redirect("/Admin/Order/Index");

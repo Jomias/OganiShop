@@ -27,7 +27,7 @@ namespace AppManager.Controllers
                              Id = b1.Id,
                              Name = b1.Name,
                              Slug = b1.Slug,
-                             Price = (prd.CreatedDate <= DateTime.Now && prd.EndDate >= DateTime.Now)
+                             Price = (prd.StartDate <= DateTime.Now && prd.EndDate >= DateTime.Now)
                                      ? (prd.DiscountType == 0 ? (b1.Price - prd.DiscountValue) : (b1.Price * (1 - prd.DiscountValue / 100)))
                                      : b1.Price,
                          });

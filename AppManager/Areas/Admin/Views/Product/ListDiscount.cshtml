@@ -1,0 +1,152 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Giảm giá sản phẩm";
+    string error = TempData["Error"] as string;
+    if (!string.IsNullOrEmpty(error))
+    {
+        <script type="text/javascript">
+            alert('@error');
+        </script>
+    }
+}
+
+<section class="content-header">
+    <h1>
+        &nbsp;
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Admin/Home"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li><a href="/Admin/Product/Index">Sản phẩm</a></li>
+        <li class="active">Chi tiết khuyến mại</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Thông tin khuyến mại</h3>
+                </div>
+
+                <form role="form" method="post" action="/Admin/Product/AddOrUpdateDiscount">
+                    <input type="text" name="id" value="@(Model != null ? Model.Id : 0)" hidden />
+                    <input type="text" name="productId" value="@(Model != null ? Model.ProductId : 0)" hidden />
+                    <input type="text" name="createdDate" value="@(Model.CreatedDate)" hidden />
+                    <input type="text" name="createdBy" value="@(Model.CreatedBy)" hidden />
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>Loại khuyến mãi</label>
+                            <select class="form-control"
+                                value="@(Model != null ? Model.DiscountType : 0)" name="discountType">
+                                <option value="0">Giá trị sản phẩm</option>
+                                <option value="1">Phần trăm sản phẩm</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Giá trị khuyến mãi</label>
+                            <input type="number" class="form-control" name="discountValue" minvalue="1" maxvalue="10"
+                                value="@(Model != null ? Model.DiscountValue : "")">
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày bắt đầu</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" name="startDate" class="form-control pull-right" id="datepicker"
+                                    value="@(Model != null ? Model.StartDate : DateTime.Now)">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày kết thúc</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" name="endDate" class="form-control pull-right" id="datepicker"
+                                    value="@(Model != null ? Model.EndDate : DateTime.Now)">
+                            </div>
+                            <!-- /.input group -->
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" class="btn btn-default"><a href="/Admin/Product/ListDiscount?productId=@Model.ProductId">Cancel</a></button>
+                        <button type="submit" class="btn btn-info pull-right">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-xs-8">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Chi tiết khuyến mại</h3>
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding" style="text-align:center">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã khuyến mại</th>
+                                <th>Khuyến mại theo</th>
+                                <th>Giá trị khuyến mại</th>
+                                <th>Ngày bắt đầu</th>
+                                <th>Ngày kết thúc</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list-discount">
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <!-- /.box -->
+    </div>
+    </div>
+</section>
+
+@section Scripts{
+<script>
+    $.ajax({
+        url: "/Admin/Product/GetDiscount?productId=" + '@Model.ProductId',
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+        },
+        success: function (data) {
+            data.forEach(function (item, index) {
+                let value = item.discountType == 1 ? item.discountValue + "%" : item.discountValue + "$"
+                $('#list-discount').append(`<tr>
+                                                    <td>${index + 1}</td>
+                                                    <td>${item.id}</td>
+                                                    <td>${item.discountType == 1 ? "Phần trăm sản phẩm" : "Giá trị sản phẩm"}</td>
+                                                    <td>${value}</td>
+                                                    <td>${Intl.DateTimeFormat('en-US').format(new Date(Date.parse(item.startDate)))}</td>
+                                                    <td>${Intl.DateTimeFormat('en-US').format(new Date(Date.parse(item.endDate)))}</td>
+                                                    <td>
+                                                        <a href="/Admin/Product/ListDiscount?productId=${item.productId}&id=${item.id}" class="btn btn-default btn-warning" style="color: white">Sửa</a>
+                                                        <a href="/Admin/Product/DeleteDiscount?id=${item.id}" class="btn btn-default btn-danger" style="color: white">Xóa</a>
+                                                    </td>
+                                                </tr>`)
+            });
+        },
+        error: function () {
+            console.log("error!");
+        },
+        complete: function () { }
+    });
+</script>
+}

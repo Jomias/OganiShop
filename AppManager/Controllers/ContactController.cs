@@ -1,5 +1,7 @@
 ﻿using AppManager.Entities;
+using AppManager.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace AppManager.Controllers
 {
@@ -13,6 +15,21 @@ namespace AppManager.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult SendContact(ContactMessageModel model)
+        {
+            var contactMes = new ContactMessageEntity()
+            {
+                Name = model.Name,
+                Email = model.Email,
+                Message = model.Message,
+                Time = DateTime.Now,
+            };
+            _dbContext.ContactMessageEntities.Add(contactMes);
+            _dbContext.SaveChanges();
+            return Redirect("/Home/Index");
         }
     }
 }

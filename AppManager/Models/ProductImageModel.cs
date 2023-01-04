@@ -1,6 +1,6 @@
 ﻿namespace AppManager.Models
 {
-    public class ProductImageModel
+    public class ProductImageModel : BaseModel
     {
         public int Id { get; set; }
         public int ProductId { get; set; }

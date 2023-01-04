@@ -14,7 +14,7 @@
         <li class="active">Chi tiết đơn hàng</li>
     </ol>
 </section>
-        <!-- Main content -->
+<!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-4">
@@ -26,13 +26,13 @@
                     <table class="table table-hover">
                         <tr>
                             <th>Mã đơn hàng</th>
-                            <td>@Model.Order.ShopOrderId</td>
+                            <td>@Model.ShopOrder.ShopOrderId</td>
                         </tr>
-                            <tr>
+                        <tr>
                             <th>Tình trạng</th>
                             <td>
                                 @{
-                                    switch (Model.Order.OrderStatus)
+                                    switch (Model.ShopOrder.OrderStatus)
                                     {
                                         case 0:
                                             <span class="label label-warning">Pending</span>
@@ -44,7 +44,10 @@
                                             <span class="label label-success">Shipped</span>
                                             break;
                                         case 3:
-                                            <span class="label label-danger">Delivered</span>
+                                            <span class="label label-success">Delivered</span>
+                                            break;
+                                        case 4:
+                                            <span class="label label-danger">Cancelled</span>
                                             break;
                                         default:
                                             <span class="label label-warning">Pending</span>
@@ -57,24 +60,35 @@
                             <th>Người mua</th>
                             <td>
                                 @{
-                                    if (Model.Order.Account == null){
+                                    if (Model.ShopOrder.Account == null)
+                                    {
                                         <span style="color:#bfc4c4">Ẩn danh</span>
                                     }
-                                    else {
-                                        <span>@Model.Order.Account</span>
+                                    else
+                                    {
+                                        <span>@Model.ShopOrder.Account</span>
                                     }
                                 }
                             </td>
                         </tr>
                         <tr>
                             <th>Ngày mua hàng</th>
-                            <td>@Model.Order.CreatedDate</td>
+                            <td>@Model.ShopOrder.CreatedDate</td>
                         </tr>
                     </table>
                 </div>
                 <div class="box-footer">
-                    <a href="/Admin/Order/Index"><button type="submit" class="btn btn-default">Cancel</button></a>
-                    <a href="/Admin/Order/Delete?id=@Model.Order.ShopOrderId"><button type="submit" class="btn btn-info pull-right">Xoá</button></a>
+                    <a href="/Admin/Order/Index" class="btn btn-default">Cancel</a>
+                    @{
+                        if (Model.ShopOrder.OrderStatus == 1)
+                        {
+                            <a href="/Admin/Order/Cancel?id=@Model.ShopOrder.ShopOrderId" class="btn btn-info"
+                            style="margin-left: 10px">Hủy đơn</a>
+                            <a href="/Admin/Order/Confirm?id=@Model.ShopOrder.ShopOrderId" class="btn btn-primary"
+                            style="margin-left: 10px">Xác nhận đơn hàng</a>
+                        }
+                    }
+
                 </div>
             </div>
         </div>
@@ -93,43 +107,43 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                <table class="table table-hover">
-                    <tbody>
-                        <tr>
-                            <th>STT</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Số lượng mua</th>
-                            <th>Giá tiền</th>
-                            <th>Thành tiền</th>
-                        </tr>
-                        @{
-                            var stt = 1;
-                            foreach(var item in Model.IndexDetail)
-                            {
-                                <tr>
-                                    <td>@stt</td>
-                                    <td>@item.ProductName</td>
-                                    <td>@item.Quantity</td>
-                                    <td>@item.Price.ToString("0.00")$</td>
-                                    <td>@item.TotalPrice.ToString("0.00")$</td>
-                                </tr>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Số lượng mua</th>
+                                <th>Giá tiền</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                            @{
+                                var stt = 1;
+                                foreach (var item in Model.ListOrderDetail)
+                                {
+                                    <tr>
+                                        <td>@stt</td>
+                                        <td>@item.ProductName</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Price.ToString("0.00")$</td>
+                                        <td>@item.TotalPrice.ToString("0.00")$</td>
+                                    </tr>
+                                }
+                                stt++;
                             }
-                            stt++;
-                        }
-                    </tbody>
-                    <tfoot>
-                        <th>&nbsp;</th>
-                        <th>Tổng tiền</th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                        <th>@Model.Order.TotalPrice.ToString("0.00")$</th>
-                    </tfoot>
-                </table>
+                        </tbody>
+                        <tfoot>
+                            <th>&nbsp;</th>
+                            <th>Tổng tiền</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>@Model.ShopOrder.TotalPrice.ToString("0.00")$</th>
+                        </tfoot>
+                    </table>
                 </div>
                 <!-- /.box-body -->
-                </div>
             </div>
-        <!-- /.box -->
         </div>
+        <!-- /.box -->
+    </div>
     </div>
 </section>

@@ -6,6 +6,7 @@
     int stt = pageSize * pageNumber - (pageSize - 1);
     int categoryId = (int)ViewBag.categoryId;
     int tagId = (int)ViewBag.tagId;
+    string name = (string) ViewBag.name;
 }
 
 <section class="hero hero-normal">
@@ -72,8 +73,8 @@
             <div class="col-lg-4 col-md-5">
                 <div class="blog__sidebar">
                     <div class="blog__sidebar__search">
-                        <form action="#">
-                            <input type="text" placeholder="Search...">
+                        <form onsubmit="Search()">
+                            <input type="text" placeholder="Search..." name="search" value="@name" id="search">
                             <button type="submit"><span class="icon_search"></span></button>
                         </form>
                     </div>
@@ -136,9 +137,9 @@
                                             <li><i class="fa fa-calendar-o"></i> @item.CreatedDate.ToString("MMM d, yyyy")</li>
                                             <li><i class="fa fa-comment-o"></i> 5</li>
                                         </ul>
-                                        <h5><a href="/BlogDetail/Index?id=@item.Id">@item.Title</a></h5>
+                                        <h5><a href="/Blog/Detail?id=@item.Id">@item.Title</a></h5>
                                         <p>@item.Description</p>
-                                        <a href="/BlogDetail/Index?id=@item.Id" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
+                                        <a href="/Blog/Detail?id=@item.Id" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
                                     </div>
                                 </div>
                             </div>
@@ -146,14 +147,14 @@
                     }
                     <div class="col-lg-12">
                         <div class="product__pagination blog__pagination">
-                            <a href="/Blog/Index?categoryId=@categoryId&tagId=@tagId&pageNumber=@Math.Min(pageNumber + 1, pageCount)"><i class="fa fa-long-arrow-left"></i></a>
+                            <a href="/Blog/Index?search=@name&categoryId=@categoryId&tagId=@tagId&pageNumber=@Math.Min(pageNumber + 1, pageCount)"><i class="fa fa-long-arrow-left"></i></a>
                             @{
                                 for (int i = 1; i <= pageCount; ++i)
                                 {
-                                    <a href="/Blog/Index?categoryId=@categoryId&tagId=@tagId&pageNumber=@i">@i</a>
+                                    <a href="/Blog/Index?search=@name&categoryId=@categoryId&tagId=@tagId&pageNumber=@i">@i</a>
                                 }
                             }
-                            <a href="/Blog/Index?categoryId=@categoryId&tagId=@tagId&pageNumber=@Math.Min(pageNumber + 1, pageCount)"><i class="fa fa-long-arrow-right"></i></a>
+                            <a href="/Blog/Index?search=@name&categoryId=@categoryId&tagId=@tagId&pageNumber=@Math.Min(pageNumber + 1, pageCount)"><i class="fa fa-long-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -168,7 +169,7 @@
     <script>
         // category
         $.ajax({
-            url: "/Home/GetAllCategories",
+            url: "/Category/GetAllCategories",
             type: "GET",
             dataType: "json",
             beforeSend: function () {
@@ -202,10 +203,10 @@
                 let row = ''
                 data.forEach(function (item, index){
                     if (item.id === @ViewBag.categoryId) {
-                        row = `<li><a style="color:lightgreen;" href="/Blog/Index?categoryId=${item.id}&tagId=@ViewBag.tagId">${item.name} (${item.blogQuantity})</a></li>`;
+                        row = `<li><a style="color:lightgreen;" href="/Blog/Index?search=@ViewBag.name&categoryId=${item.id}&tagId=@ViewBag.tagId">${item.name} (${item.blogQuantity})</a></li>`;
                     }
                     else {
-                        row = `<li><a href="/Blog/Index?categoryId=${item.id}&tagId=@ViewBag.tagId">${item.name} (${item.blogQuantity})</a></li>`;
+                        row = `<li><a href="/Blog/Index?search=@ViewBag.name&categoryId=${item.id}&tagId=@ViewBag.tagId">${item.name} (${item.blogQuantity})</a></li>`;
                     }
                     $('#blog-category').append(row);
                 })
@@ -227,7 +228,6 @@
 
             },
             success: function(data){
-                console.log(data);
                 $('#recent-news').html('');
                 data.forEach(function (item,index){
                     var words = item.title.split(" ");
@@ -239,7 +239,7 @@
                         b += words[i].charAt(0).toUpperCase() + words[i].substring(1) + " ";
                     }
                     let date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'full'}).format(new Date(Date.parse(item.createdDate)));
-                    let row = `<a href="/BlogDetail/Index?id=${item.id}" class="blog__sidebar__recent__item">
+                    let row = `<a href="/Blog/Detail?id=${item.id}" class="blog__sidebar__recent__item">
                                     <div class="blog__sidebar__recent__item__pic">
                                         <img src="${item.blogAvatarFilePath}" style="width:70px; height:70px;" alt="">
                                     </div>
@@ -266,10 +266,10 @@
                 let row = '';
                 data.forEach(function (item,index){
                     if (item.id === @ViewBag.tagId) {
-                        row = `<a style="color:lightgreen;" href="/Blog/Index?categoryId=@ViewBag.categoryId&tagId=${item.id}">${item.name}</a>`
+                        row = `<a style="color:lightgreen;" href="/Blog/Index?search=@ViewBag.name&categoryId=@ViewBag.categoryId&tagId=${item.id}">${item.name}</a>`
                     }
                     else {
-                        row = `<a href="/Blog/Index?categoryId=@ViewBag.categoryId&tagId=${item.id}">${item.name}</a>`;
+                        row = `<a href="/Blog/Index?search=@ViewBag.name&categoryId=@ViewBag.categoryId&tagId=${item.id}">${item.name}</a>`;
                     }
                     $('#tags').append(row);
                 })
@@ -281,5 +281,10 @@
 
             }
         });
+
+        function Search() {
+            let temp = '/Blog/Index?search=' + $('input[name="search"]').val();
+            window.location.assign('temp');
+        };
     </script>
 }
