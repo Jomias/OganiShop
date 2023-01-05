@@ -90,7 +90,7 @@ Frontend admin: https://adminlte.io/themes/AdminLTE/index2.html
 - Lọc theo danh mục.
 - Paging + Search.
 - Xem bài viết chi tiết.
-### ShopOrder
+#### ShopOrder
 - Hiển thị các đơn hàng và chi tiết đơn hàng.
 - Có thể hủy đơn hàng.
 - Xác nhận đơn hàng sẽ tự động trừ số lượng vào trong số lượng của sản phẩm .
