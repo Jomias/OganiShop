@@ -47,7 +47,7 @@ Frontend admin: https://adminlte.io/themes/AdminLTE/index2.html
 - Thanh toán thì sẽ chuyển các thông tin trong giỏ hàng thành order của shop.
 #### Blog
 - Render các bài viết.
-- Click vào bài viết đến bài viết tương ứng.
+- Click vào bài viết sẽ chuyển đến trang chi tiết tương ứng
 - Filter theo tag.
 - Filter theo thư mục.
 - Tìm kiếm theo tên.
