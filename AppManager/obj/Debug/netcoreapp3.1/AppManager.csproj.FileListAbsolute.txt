@@ -290,3 +290,6 @@ D:\devMaster\Net\AppManager\AppManager\obj\Debug\netcoreapp3.1\Razor\Views\Blog\
 D:\devMaster\Net\AppManager\AppManager\obj\Debug\netcoreapp3.1\Razor\Views\Product\Detail.cshtml.g.cs
 D:\devMaster\Net\AppManager\AppManager\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\User\Index.cshtml.g.cs
 D:\devMaster\Net\AppManager\AppManager\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Account\UserProfile.cshtml.g.cs
+D:\devMaster\Net\AppManager\AppManager\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Blog\Index.cshtml.g.cs
+D:\devMaster\Net\AppManager\AppManager\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Blog\Detail.cshtml.g.cs
+D:\devMaster\Net\AppManager\AppManager\obj\Debug\netcoreapp3.1\Razor\Areas\Admin\Views\Blog\AddOrUpdate.cshtml.g.cs

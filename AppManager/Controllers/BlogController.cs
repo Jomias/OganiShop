@@ -72,6 +72,10 @@ namespace AppManager.Controllers
             return Json(temp.ToList());
         }
 
+        public IActionResult GetAllCategoryBlog()
+        {
+            return Json(_dbContext.CategoryBlogEntities.Where(x => !x.IsDeleted));
+        }
         public IActionResult GetAllTags()
         {
             var query = _dbContext.TagEntities.Where(x => !x.IsDeleted);    
