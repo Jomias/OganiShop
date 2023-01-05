@@ -7,33 +7,42 @@ Frontend admin: https://adminlte.io/themes/AdminLTE/index2.html
 
 ## Các chức năng
 
-### Thanh điều hướng
-- Đăng nhập và đăng xuất
-- Điều hướng đến các trang
-- Tìm kiếm sản phẩm sẽ chuyển về trang ShoppingGrid
-- Ấn vào biểu tượng 
 ### Trang người dùng
+#### Thanh điều hướng
+- Đăng nhập và đăng xuất.
+- Điều hướng đến các trang.
+- Tìm kiếm sản phẩm sẽ chuyển về trang ShoppingGrid.
+- Ấn vào biểu tượng giỏ hàng sẽ chuyển về trang Shopping Cart.
+- Ấn vào các category sẽ chuyển về trang ShoppingGrid với loại sản phẩm tương ứng.
+
 #### Home
-- Render các sản phẩm nổi bật các blog.
-- 
-- Click vào sản phẩm redirect đến trang tương ứng.
-- Click vào blog redirect đến bài viết tương ứng.
-#### ShoppingGrid
-- Render sản phẩm dựa trên thông tin trong database. Sản phẩm xuất hiện trên mục giảm giá sẽ không xuất hiện bên dưới nữa.
-- Filter theo giá.
-- Filter theo thư mục.
+- Render các sản phẩm nổi bật, các blog.
+- Render banner
+- Click vào sản phẩm redirect đến trang chi tiết sản phẩm.
+- Click vào blog redirect đến bài viết chi tiết.
+#### Các sản phẩm
+- Hiển thị hình đại diện và giá tiền của sản phẩm.
+- Có thể thêm vào giỏ hàng thông qua nút cart.
+#### Trang ShoppingGrid
+- Render các sản phẩm được giảm giá.
+- Render các sản phẩm thuộc danh mục khác nhau.
+- Filter theo danh mục, theo giá.
+- Sắp xếp sản phẩm theo giá, theo tên, theo ngày tạo.
 - Paging.
-#### ProductDetail
-- Render sản phẩm tương ứng với link.
-- Có sản phẩm tương tự.
+#### Chi tiết sản phẩm
+- Render sản phẩm tương ứng.
+- Render các sản phẩm liên quan.
+- Sản phẩm có thể thêm vào giỏ hàng 
+- Bao gồm 1 ảnh đại diện và các ảnh khác của sản phẩm.
+- Các thông tin khác
 #### ShoppingCart
 - Hiển thị sản phẩm có trong giỏ. 
-+ Nếu là người dùng ẩn danh, sản phẩm sẽ biến mất khi cookie hết thời hạn.
-+ Nếu là người dùng đăng ký tài khoản, những thứ trong giỏ hàng luôn tồn tại.
-- Có thể thay đổi số lượng + xoá sản phẩm khỏi giỏ
++ Cho phép người dùng ẩn danh với cookies.
++ Lưu trữ giỏ hàng khi khách đăng nhập.
+- Có thể xóa và cập nhật số lượng sản phẩm.
+
 #### CheckOut
-- Nếu lần đầu mua hàng sẽ phải điền địa chỉ trước khi check out (có validate form)
-- Nếu không phải lần đầu mua, hệ thống sẽ đưa ra những địa chỉ trước đây đã từng nhập để lựa chọn hoặc điền địa chỉ mới.
+- Nếu khách đăng nhập thì sẽ lưu thông tin địa chỉ của khách
 - Không có gì trong giỏ hàng sẽ không thanh toán được.
 #### Blog
 - Render các post theo thông tin trong database.
