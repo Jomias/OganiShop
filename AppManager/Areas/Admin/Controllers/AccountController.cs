@@ -26,24 +26,101 @@ namespace AppManager.Areas.Admin.Controllers
             _dbContext = dbContext;
             _environment = environment;
         }
+        public string GetAccount()
+        {
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            var account = claims.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return account;
+        }
+        public IActionResult UserProfile(string account)
+        {
+            ViewBag.Account = GetAccount();
+            ViewBag.Role = _dbContext.AccountManagerEntities.First(x => x.Account == GetAccount()).Role;
+            var acc = string.IsNullOrEmpty(account) ? GetAccount() : account;
+            var user = (from b1 in _dbContext.UserEntities
+                        join b2 in _dbContext.AccountImageEntities on b1.Account equals b2.Account
+                        join b3 in _dbContext.FileManageEntities on b2.FileId equals b3.Id
+                        join b4 in _dbContext.AccountManagerEntities on b1.Account equals b4.Account
+                        where !b2.IsDeleted && b2.IsAvatar && b1.Account == acc
+                        select new UserModel
+                        {
+                            Account = acc,
+                            FirstName = b1.FirstName,
+                            LastName = b1.LastName,
+                            Phone = b1.Phone,
+                            Email = b1.Email,
+                            AvatarId = b3.Id,
+                            AvatarPath = b3.FilePath,
+                            Role = b4.Role,
+                        }).First();
+            return View(user);
+        }
+
+        public IActionResult UpdateAvatar(string account, int oldId, int newId)
+        {
+            var oldImage = _dbContext.AccountImageEntities.First(x => x.FileId == oldId);
+            oldImage.IsAvatar = false;
+            oldImage.UpdatedDate = DateTime.Now;
+            oldImage.UpdatedBy = account;
+            _dbContext.AccountImageEntities.Update(oldImage);
+            var newImage = new AccountImageEntity()
+            {
+                Account = account,
+                FileId = newId,
+                IsAvatar = true,
+                CreatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+                Status = 0,
+                CreatedBy = account,
+                UpdatedBy = account,
+            };
+            _dbContext.AccountImageEntities.Add(newImage);
+            _dbContext.SaveChanges();
+            return Redirect("/Admin/Account/UserProfile");
+        }
+
+        [HttpPost]
+        public IActionResult UserProfile(UserModel model)
+        {
+            var account = _dbContext.AccountManagerEntities.First(x => x.Account == model.Account);
+            account.Role = model.Role;
+            account.UpdatedDate = DateTime.Now;
+            account.UpdatedBy = model.Account;
+            _dbContext.AccountManagerEntities.Update(account);
+            var entity = _dbContext.UserEntities.First(x => x.Account == model.Account);
+            entity.Account = model.Account;
+            entity.FirstName = model.FirstName;
+            entity.LastName = model.LastName;
+            entity.Phone = model.Phone;
+            entity.Email = model.Email;
+            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedBy = GetAccount();
+
+            _dbContext.UserEntities.Update(entity);
+            _dbContext.SaveChanges();
+            return UserProfile(model.Account);
+        }
+
 
         public IActionResult Login(string ReturnUrl)
         {
-            var cl = HttpContext.User.Identity as ClaimsIdentity;
-            if (cl.Claims.Any())
+            var claim = HttpContext.User.Identity as ClaimsIdentity;
+            if (!claim.Claims.Any())
             {
-                var role = cl.Claims.Where(c => c.Type == ClaimTypes.Role)
-                                    .Select(c => c.Value).SingleOrDefault();
-                if (role == "customer")
-                {
-                    return Redirect("/Home/Index");
-                }
-                var returnUrl = string.IsNullOrEmpty(ReturnUrl) ? "/Admin/Home/Index" : ReturnUrl;
-                return Redirect(returnUrl);
+                ViewBag.ReturnUrl = ReturnUrl;
+                return View();
             }
-            ViewBag.ReturnUrl = ReturnUrl;
-            return View();
+            var role = claim.Claims.Where(c => c.Type == ClaimTypes.Role)
+                                .Select(c => c.Value).SingleOrDefault();
+            if (role == "customer")
+            {
+                return Redirect("/Home/Index");
+            }
+            var returnUrl = string.IsNullOrEmpty(ReturnUrl) ? "/Admin/Home/Index" : ReturnUrl;
+            return Redirect(returnUrl);
+
         }
+
         [HttpPost]
         public async Task<IActionResult> Login(AccountManagerModel model)
         {
@@ -60,27 +137,28 @@ namespace AppManager.Areas.Admin.Controllers
                                                       Password = a.Password,
                                                       Role = a.Role
                                                   }).ToList();
-            if (query.Any())
+            if (!query.Any())
             {
-                var account = query.FirstOrDefault();
-                var claims = new List<Claim>()
+                TempData["Error"] = "Tài khoản hoặc mật khẩu không chính xác!";
+                return Redirect("/Admin/Account/Login");
+            }
+            var account = query.FirstOrDefault();
+            var claims = new List<Claim>()
                 {
                     new Claim(ClaimTypes.NameIdentifier, account.Account)
                 };
-                claims.Add(new Claim(ClaimTypes.Role, account.Role));
-                var claimIndentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIndentity));
-                HttpContext.Response.Cookies.Append("account", account.Account);
+            claims.Add(new Claim(ClaimTypes.Role, account.Role));
+            var claimIndentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIndentity));
+            HttpContext.Response.Cookies.Append("account", account.Account);
 
-                if (account.Role == "customer")
-                {
-                    return Redirect("/Home/Index");
-                }
-                var returnUrl = string.IsNullOrEmpty(model.ReturnUrl) ? "/Admin/Home/Index" : model.ReturnUrl;
-                return Redirect(returnUrl);
+            if (account.Role == "customer")
+            {
+                return Redirect("/Home/Index");
             }
-            TempData["Error"] = "Tài khoản hoặc mật khẩu không chính xác!";
-            return Redirect("/Admin/Account/Login");
+            var returnUrl = string.IsNullOrEmpty(model.ReturnUrl) ? "/Admin/Home/Index" : model.ReturnUrl;
+            return Redirect(returnUrl);
+
         }
         public async Task<IActionResult> SignOut()
         {
@@ -88,6 +166,7 @@ namespace AppManager.Areas.Admin.Controllers
             HttpContext.Response.Cookies.Delete("Account");
             return Redirect("/Admin/Account/Login");
         }
+
         public IActionResult SignUp()
         {
             return View();
@@ -166,6 +245,8 @@ namespace AppManager.Areas.Admin.Controllers
                 FileType = "image",
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
+                CreatedBy = GetAccount(),
+                UpdatedBy = GetAccount(),
             };
             _dbContext.FileManageEntities.Add(fileEntity);
             var status = _dbContext.SaveChanges();
@@ -180,6 +261,7 @@ namespace AppManager.Areas.Admin.Controllers
                 FilePath = fileEntity.FilePath,
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
+                Status = 0,
             };
             return Json(new
             {

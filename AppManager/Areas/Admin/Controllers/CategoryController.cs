@@ -141,7 +141,7 @@ namespace AppManager.Areas.Admin.Controllers
                 CreatedBy = account,
                 UpdatedBy = account,
                 Status = 0,
-            };  
+            };
             _dbContext.FileManageEntities.Add(fileEntity);
             var status = _dbContext.SaveChanges();
             if (status == 0)

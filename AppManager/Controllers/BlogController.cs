@@ -16,6 +16,7 @@ namespace AppManager.Controllers
             _dbContext = dbContext;
         }
 
+        [HttpGet]
         public IActionResult Index(string search, int categoryId, int tagId, int pageNumber = 1)
         {
             var name = String.IsNullOrEmpty(search) ? "" : search;
@@ -53,13 +54,22 @@ namespace AppManager.Controllers
             ViewBag.tagId = tagId;
             ViewBag.name = name;
             return View(query.Skip(pageSize * (pageNumber - 1)).Take(pageSize).ToList());
-
         }
 
         public IActionResult GetCategoryBlog()
         {
-            var query = _dbContext.CategoryBlogEntities.Where(x => !x.IsDeleted);
-            return Json(query.ToList());
+            var temp = (from b1 in _dbContext.CategoryBlogEntities
+                        join b2 in _dbContext.BlogEntities on b1.Id equals b2.CategoryId
+                        where !b2.IsDeleted && !b1.IsDeleted && b1.Status == 0
+                        group new { b1, b2 } by new { b1.Id, b1.Name, b1.Slug } into b3
+                        select new CategoryBlogModel()
+                        {
+                            Id = b3.Key.Id,
+                            Name = b3.Key.Name,
+                            Slug = b3.Key.Slug,
+                            BlogQuantity = b3.Count()
+                        });
+            return Json(temp.ToList());
         }
 
         public IActionResult GetAllTags()
@@ -102,7 +112,7 @@ namespace AppManager.Controllers
                          join b4 in _dbContext.AccountImageEntities on b3.Account equals b4.Account
                          join b5 in _dbContext.FileManageEntities on b4.FileId equals b5.Id
                          join b6 in _dbContext.UserEntities on b3.Account equals b6.Account
-                         where !b1.IsDeleted && b1.Id == id && b4.IsAvatar
+                         where !b1.IsDeleted && b1.Id == id && b4.IsAvatar && b1.Status == 0
                          select new BlogDetailModel()
                          {
                              Id = b1.Id,
