@@ -24,6 +24,7 @@ Frontend admin: https://adminlte.io/themes/AdminLTE/index2.html
 - Hiển thị hình đại diện và giá tiền của sản phẩm.
 - Có thể thêm vào giỏ hàng thông qua nút cart.
 #### ShoppingGrid
+- Tìm kiếm sản phẩm theo tên
 - Render các sản phẩm được giảm giá.
 - Render các sản phẩm thuộc danh mục khác nhau.
 - Filter theo danh mục, theo giá.
