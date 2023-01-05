@@ -14,22 +14,21 @@ Frontend admin: https://adminlte.io/themes/AdminLTE/index2.html
 - Tìm kiếm sản phẩm sẽ chuyển về trang ShoppingGrid.
 - Ấn vào biểu tượng giỏ hàng sẽ chuyển về trang Shopping Cart.
 - Ấn vào các category sẽ chuyển về trang ShoppingGrid với loại sản phẩm tương ứng.
-
 #### Home
-- Render các sản phẩm nổi bật, các blog.
-- Render banner
+- Hiển thị các sản phẩm nổi bật, các blog.
+- Hiển thị các banner
 - Click vào sản phẩm redirect đến trang chi tiết sản phẩm.
 - Click vào blog redirect đến bài viết chi tiết.
 #### Các sản phẩm
 - Hiển thị hình đại diện và giá tiền của sản phẩm.
 - Có thể thêm vào giỏ hàng thông qua nút cart.
-#### Trang ShoppingGrid
+#### ShoppingGrid
 - Render các sản phẩm được giảm giá.
 - Render các sản phẩm thuộc danh mục khác nhau.
 - Filter theo danh mục, theo giá.
 - Sắp xếp sản phẩm theo giá, theo tên, theo ngày tạo.
 - Paging.
-#### Chi tiết sản phẩm
+#### ProductDetail
 - Render sản phẩm tương ứng.
 - Render các sản phẩm liên quan.
 - Sản phẩm có thể thêm vào giỏ hàng 
@@ -40,47 +39,49 @@ Frontend admin: https://adminlte.io/themes/AdminLTE/index2.html
 + Cho phép người dùng ẩn danh với cookies.
 + Lưu trữ giỏ hàng khi khách đăng nhập.
 - Có thể xóa và cập nhật số lượng sản phẩm.
-
 #### CheckOut
-- Nếu khách đăng nhập thì sẽ lưu thông tin địa chỉ của khách
-- Không có gì trong giỏ hàng sẽ không thanh toán được.
+- Nếu khách đăng nhập thì sẽ lưu thông tin địa chỉ của khách.
+- Không thể thanh toán nếu ko có hàng hóa trong giỏ.
 #### Blog
-- Render các post theo thông tin trong database.
-- Click vào bài viết để đến trang tương ứng.
+- Render các bài viết.
+- Click vào bài viết đến bài viết tương ứng.
 - Filter theo tag.
 - Filter theo thư mục.
+- Tìm kiếm theo tên.
 - Paging.
 #### BlogDetail
-- Render bài viết tương ứng.
-- Có bài viết tương tự.
-
+- Hiển thị bài viết tương ứng.
+- Hiển thị blog liên quan.
+####Contact
+- Nhận thư liên lạc từ khách hàng.
 ### Trang admin
 #### Account
-- Có thể đăng nhập hoặc đăng ký.
-- Khi đăng ký thành công sẽ chuyển về trang đăng nhập. Tài khoản đăng ký auto tài khoản khách hàng.
-- Có thể đăng xuất (cả admin lẫn người dùng)
-- Hiển thị tài khoản tương ứng khi đăng nhập thành công (ở trên thanh navbar)
+- Có phân quyền
+- Có thể đăng nhập, đăng ký, đăng xuất
+- Khi đăng ký thành công sẽ chuyển về trang đăng nhập.
+- Mã hóa mật khẩu.
+- Hiển thị tài khoản tương ứng (cho cả admin/khách hàng)
 #### User
 - Xem, sửa thông tin cá nhân + ảnh đại diện.
-- Chỉ có admin mới có thể sửa vai trò.
-- Chỉ có admin mới có thể xem danh sách người dùng (paging).
+- Admin có thể sửa thông tin người khác.
+- Các role khác có thể tự cập nhật thông tin cá nhân nhưng không sửa được tài khoản người khác.
 #### Trang chủ
-- Hiển thị thống kê theo tháng và năm (gộp theo danh mục sản phẩm)
-- Hiển thị những nhân viên mới và danh sách đơn hàng.
+- Thống kê, báo cáo.
+- Hiển thị các tin nhắn mới nhất từ khách hàng
 #### Product
 - Hiển thị danh sách sản phẩm.
 - Có thể xoá / thay đổi thông tin sản phẩm.
 - Có thể thêm ảnh / đặt lại ảnh đại diện cho sản phẩm.
-- Paging.
+- Thêm sửa xóa khuyến mại của sản phẩm
+- Paging + Search.
 #### Category
 - Hiển thị danh sách thư mục. 
 - Có thể xoá / thay đổi / đặt lại ảnh cho thư mục.
-- Paging.
+- Paging + Search.
 #### Blog
-- Hiển thị tất cả bài viết công khai.
-- Thêm thư mục cho blog.
-- Lọc theo thư mục.
-- Xem + sửa + thêm bài viết của bản thân ở chế độ công khai / nháp / xoá.
-- Paging.
-#### Report
-- Y như trang chủ nhưng cắt bỏ phần nhân viên mới + danh sách đơn hàng
+- Admin có thể xem tất cả các bài viết và thêm sửa xóa
+- Hiển thị các bài viết công khai và bài viết cá nhân cho các chức vụ khác
+- Xem + Sửa các bài viết của cá nhân cho các chức vụ khác
+- Thêm/Xóa danh mục Blog.
+- Lọc theo danh mục.
+- Paging + Search.
