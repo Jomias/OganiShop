@@ -1,0 +1,167 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Trang chủ";
+}
+
+<section class="content-header">
+    <h1>
+        Trang chủ
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard active"></i> Home</a></li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="callout callout-warning">
+        <h4>Báo cáo!</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Tỉ lệ danh mục sản phẩm đã bán</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body chart-responsive">
+                    <div class="chart" id="sales-chart" style="height: 300px; position: relative;"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Doanh thu các ngày gần nhất</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body chart-responsive">
+                    <div class="chart" id="line-chart" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Latest Mail</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="table-responsive">
+                    <table class="table no-margin">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên người dùng</th>
+                                <th>Email</th>
+                                <th>Tin nhắn</th>
+                                <th>Thời gian gửi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="message-list">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+<script>
+    $.ajax({
+        url: "/Admin/Report/GetCategoryOrderQuantity",
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+        },
+        success: function (data) {
+            var donut = new Morris.Donut({
+                element: 'sales-chart',
+                resize: true,
+                colors: ["#3c8dbc", "#f56954", "#B21516", "#1531B2", "#1AB244", "#B29215"],
+                data: data,
+                hideHover: 'auto'
+            });
+        },
+        error: function (error) {
+        },
+        complete: function () {
+        }
+    });
+
+    $.ajax({
+        url: "/Admin/Contact/GetLatestMessage",
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+        },
+        success: function (data) {
+            console.log(data);
+            data.forEach(function (item, index) {
+                $('#message-list').append(`<tr>
+                                                <td>${index + 1}</td>
+                                                <td>${item.name}</td>
+                                                <td>${item.email}</td>
+                                                <td>${item.message}</td>
+                                                <td>${item.time}</td>
+                                            </tr>`)
+            });
+        },
+        error: function (error) {
+        },
+        complete: function () {
+        }
+    });
+
+    $.ajax({
+        url: "/Admin/Report/GetRevenue",
+        type: "GET",
+        dataType: "json",
+        beforeSend: function () {
+        },
+        success: function (data) {
+            var line = new Morris.Line({
+                element: 'line-chart',
+                resize: true,
+                data: data,
+                xkey: 'y',
+                ykeys: ['revenue'],
+                labels: ['Revenue'],
+                lineColors: ['#3c8dbc'],
+                hideHover: 'auto'
+            });
+
+        },
+        error: function (error) {
+        },
+        complete: function () {
+        }
+    });
+
+</script>
+}

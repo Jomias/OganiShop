@@ -1,0 +1,193 @@
+﻿@using AppManager.Models
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Sản phẩm";
+    string error = TempData["error"] as string;
+    List<CategoryModel> listCategory = ViewBag.Category;
+}
+
+<section class="content-header">
+    <h1>
+        &nbsp;
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Sản phẩm</a></li>
+        <li class="active">Quản lý sản phẩm</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Quản lý sản phẩm</h3>
+            @if (!string.IsNullOrEmpty(error))
+            {
+                <p class="text-danger">@error</p>
+            }
+        </div>
+        <!-- /.box-header -->
+        <form class="form-horizontal" action="/Admin/Product/AddOrUpdate" method="Post" style="overflow: hidden">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="number" name="id" value="@(Model.Id == 0 ? 0 : Model.Id)" hidden>
+                            <label class="col-md-3 control-label">Sản phẩm</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="name"
+                                    value="@(Model.Id == 0 ? "" : Model.Name)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Tình trạng</label>
+                            <div class="col-md-9">
+                                <select class="form-control" name="status" style="width: 100%;">
+                                    @{
+                                        if (Model.Status == 0)
+                                        {
+                                            <option value="0" selected>Còn hàng</option>
+                                            <option value="1">Cần nhập hàng</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="0">Còn hàng</option>
+                                            <option value="1" selected>Cần nhập hàng</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Giá bán</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="price"
+                                    value="@(Model.Id == 0 ? "" : Model.Price)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Giá gốc</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="oldPrice"
+                                    value="@(Model.Id == 0 ? "" : Model.OldPrice)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Số lượng</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="quantity"
+                                    value="@(Model.Id == 0 ? "" : Model.Quantity)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Trọng lượng</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="weight"
+                                    value="@(Model.Id == 0 ? "" : Model.Weight)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Đơn vị đo</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="unit"
+                                    value="@(Model.Id == 0 ? "" : Model.Unit)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Thuộc danh mục</label>
+                            <div class="col-md-9">
+                                <select class="form-control" name="categoryId" style="width: 100%;">
+                                    @{
+                                        foreach (var item in listCategory)
+                                        {
+                                            if (Model.CategoryId == item.Id)
+                                            {
+                                                <option value="@item.Id" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Tóm tắt</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="summary"
+                                    value="@(Model.Id == 0 ? "" : Model.Summary)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Mô tả</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" name="description"
+                                   rows="3">@Model.Description</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Ảnh đại diện</label>
+                            <div class="col-md-12 text-center">
+                                <img id="image-upload" class="rounded mx-auto d-block" style="padding-bottom:1rem"
+                                    src="@(Model.Id == 0 ? "/img/default.jpg" : Model.Avatar)" width="193px">
+                            </div>
+                            <input type="text" name="avatar" id="image-file-path"
+                                value="@(Model.Id == 0 ? 0 : Model.Avatar)" hidden>
+                            <input type="text" name="avatarFileId" id="image-file-id"
+                                value="@(Model.Id == 0 ? 0 : Model.AvatarFileId)" hidden>
+                            <div class="col-md-12 text-center">
+                                <input type="file" id="image-upload" name="fileUpload">
+                            </div>
+                        </div>
+
+                        <!-- /.form-group -->
+
+
+                        <!-- /.form-group -->
+                    </div>
+
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <div class="box-footer">
+                <button type="submit" class="btn btn-info pull-right ">Lưu thông tin</button>
+            </div>
+        </form>
+        <!-- /.box-body -->
+    </div>
+</section>
+
+
+@section Scripts{
+<script>
+    $(document).on('change', 'input[name="fileUpload"]', function () {
+        let files = $(this).prop("files");
+        let formData = new FormData();
+        formData.append("file", files[0]);
+        $.ajax({
+            url: "/Admin/Product/uploadfile",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: () => {
+
+            },
+            success: res => {
+                $('#image-upload').attr('src', res.fileInfo.filePath);
+                $('#image-file-path').val(res.fileInfo.filePath);
+                $('#image-file-id').val(res.fileInfo.id);
+            },
+            error: error => {
+                console.log(error);
+            }
+        })
+    })
+</script>
+}

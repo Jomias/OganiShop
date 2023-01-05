@@ -1,0 +1,148 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Ảnh sản phẩm";
+    int pageCount = (int)ViewBag.pageCount;
+    int pageNumber = (int)ViewBag.pageNumber;
+    int pageSize = (int)ViewBag.pageSize;
+    int stt = pageSize * pageNumber - (pageSize - 1);
+    int id = (int)ViewBag.Id;
+    int count = (int)ViewBag.Count;
+}
+
+<section class="content-header">
+    <h1>
+        &nbsp;
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Admin/Home"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Sản phẩm</a></li>
+        <li><a href="/Admin/Product">Quản lý sản phẩm</a></li>
+        <li class="active">Quản lý ảnh</li>
+    </ol>
+</section>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Danh sách ảnh</h3>
+            <table class="table table-hover table-bordered text-center" style="background-color:white">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã sản phẩm</th>
+                        <th>Mã ảnh</th>
+                        <th>Loại ảnh</th>
+                        <th>Ảnh</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="vertical-align: middle!important">@stt</td>
+                                <td style="vertical-align: middle!important">@item.ProductId</td>
+                                <td style="vertical-align: middle!important">@item.FileId</td>
+                                @{
+                                    if (item.IsAvatar)
+                                    {
+                                        <td style="vertical-align: middle!important">Ảnh đại diện</td>
+                                    }
+                                    else
+                                    {
+                                        <td style="vertical-align: middle!important">Ảnh thường</td>
+                                    }
+                                }
+                                <td style="vertical-align: middle!important"><img src="@item.FilePath" style="width:100px"></td>
+                                <td style="vertical-align: middle!important">
+                                    @{
+                                        if (!item.IsAvatar)
+                                        {
+                                            <a href="/Admin/Product/SetAvatar?id=@item.Id" class="btn btn-primary"
+                                        style="color: white">Set ảnh đại diện</a>
+                                            if (count > 1)
+                                            {
+                                                <a href="/Admin/Product/DeleteImage?id=@item.Id" class="btn btn-danger"
+                                        style="color: white">Xóa ảnh</a>
+                                            }
+                                        }
+                                        else 
+                                        {
+                                            <text>Ảnh đại diện không thể xóa</text>
+                                        }
+                                    }
+
+                                </td>
+                            </tr>
+                            stt++;
+                        }
+                    }
+                </tbody>
+            </table>
+            <div class=" clearfix">
+                <ul class="pagination pagination-sm no-margin pull-right">
+                    <li><a href="/Admin/Product/ListImage?id=@id&pageNumber=@Math.Max(pageNumber-1,1)">&laquo;</a>
+                    </li>
+                    @for (int i = 1; i <= pageCount; ++i)
+                    {
+                        <li><a href="/Admin/Product/ListImage?id=@id&pageNumber=@i">@i</a></li>
+                    }
+                    <li><a
+                            href="/Admin/Product/ListImage?id=@id&pageNumber=@Math.Min(pageNumber+1,pageCount)">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4" style="padding:5px">
+            <h3>Thêm mới ảnh</h3>
+            <form class="form-horizontal" action="/Admin/Product/AddImage" method="Post"
+                style="overflow: hidden; background-color:white">
+                <label class="col-md-3 control-label">Thêm ảnh</label>
+                <div class="col-md-12 text-center">
+                    <img id="image-upload" class="rounded mx-auto d-block" style="padding-bottom:1rem"
+                        src="/img/default.jpg" width="200px">
+                </div>
+                <input type="text" name="productId" value="@id" hidden>
+                <input type="text" name="filePath" id="image-file-path" value="" hidden>
+                <input type="text" name="fileId" id="image-file-id" value="" hidden>
+                <div class="col-md-12 text-center">
+                    <input type="file" id="image-upload" name="fileUpload">
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-info pull-right" style="margin-bottom: 5px">Thêm ảnh</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts{
+<script>
+    $(document).on('change', 'input[name="fileUpload"]', function () {
+        let files = $(this).prop("files");
+        let formData = new FormData();
+        formData.append("file", files[0]);
+        $.ajax({
+            url: "/Admin/Product/UploadFile",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: () => {
+
+            },
+            success: res => {
+                $('#image-upload').attr('src', res.fileInfo.filePath);
+                $('#image-file-path').val(res.fileInfo.filePath);
+                $('#image-file-id').val(res.fileInfo.id);
+            },
+            error: error => {
+                console.log(error);
+            }
+        })
+    })
+</script>
+}

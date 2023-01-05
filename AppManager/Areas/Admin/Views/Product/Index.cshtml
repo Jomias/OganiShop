@@ -1,0 +1,129 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Sản phẩm";
+    int pageCount = (int)ViewBag.pageCount;
+    int pageNumber = (int)ViewBag.pageNumber;
+    int pageSize = (int)ViewBag.pageSize;
+    int stt = pageSize * pageNumber - (pageSize - 1);
+    string name = ViewBag.name;
+}
+
+<section class="content-header">
+    <h1>
+        &nbsp;
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="/Admin/Home"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Sản phẩm</a></li>
+        <li class="active">Danh sách sản phẩm</li>
+    </ol>
+</section>
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Danh sách danh mục</h3>
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width: 200px;">
+                            <input id="input-search" type="text" value="@name" name="name"
+                                class="form-control pull-right" placeholder="Search">
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default" onclick="Search()"><i
+                                        class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover table-bordered text-center">
+                        <tr>
+                            <th>STT</th>
+                            <th style="font-size:1.25em">Tên SP</th>
+                            <th style="font-size:1.25em">Danh mục</th>
+                            <th style="font-size:1.25em">Clean URL</th>
+                            <th style="font-size:1.25em">Giá bán</th>
+                            <th style="font-size:1.25em">Giá gốc</th>
+                            <th style="font-size:1.25em">Số lượng</th>
+                            <th style="font-size:1.25em">Tình trạng</th>
+                            <th style="font-size:1.25em">Ảnh đại diện</th>
+                            <th style="font-size:1.25em">Thao tác</th>
+                        </tr>
+                        @{
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td style="vertical-align: middle!important">@stt</td>
+                                    <td style="vertical-align: middle!important">@item.Name</td>
+                                    <td style="vertical-align: middle!important">@item.CategoryName
+                                    </td>
+                                    <td style="vertical-align: middle!important">@item.Slug</td>
+                                    <td style="vertical-align: middle!important">@item.Price</td>
+                                    <td style="vertical-align: middle!important">@item.OldPrice</td>
+                                    <td style="vertical-align: middle!important">@item.Quantity</td>
+                                    <td style="vertical-align: middle!important">
+                                        @{
+                                            switch (item.Status)
+                                            {
+                                                case 0:
+                                                    <span class="label label-success">Còn hàng</span>
+                                                    break;
+                                                case 1:
+                                                    <span class="label label-warning">Cần nhập hàng</span>
+                                                    break;
+                                                default:
+                                                    <span class="label label-warning">Pending</span>
+                                                    break;
+                                            }
+                                        }
+                                    </td>
+                                    <td style="vertical-align: middle!important"><img
+                                        src="@item.Avatar" style="width:128px"></td>
+                                    <td style="vertical-align: middle!important">
+                                        <a href="/Admin/Product/ListDiscount?productId=@item.Id"
+                                        class="btn btn-default btn-primary" style="color: white; margin-left:5px">Giảm giá</a>
+                                        <a href="/Admin/Product/ListImage?id=@item.Id" class="btn btn-default btn-info"
+                                        style="color: white; margin-left:5px">Ảnh</a>
+                                        <a href="/Admin/Product/AddOrUpdate?id=@item.Id" class="btn btn-default btn-warning"
+                                        style="color: white; margin-left:5px">Sửa</a>
+                                        <a href="/Admin/Product/Delete?id=@item.Id" class="btn btn-default btn-danger"
+                                        style="color: white; margin-left:5px">Xóa</a>
+                                    </td>
+                                </tr>
+                                stt++;
+                            }
+                        }
+                    </table>
+                </div>
+
+                <div class="box-footer clearfix">
+                    <ul class="pagination pagination-sm no-margin pull-right">
+                        <li><a href="/Admin/Product/Index?name=@name&pageNumber=@Math.Max(pageNumber-1,1)">&laquo;</a>
+                        </li>
+                        @for (int i = 1; i <= pageCount; ++i)
+                        {
+                            <li><a href="/Admin/Product/Index?name=@name&pageNumber=@i">@i</a></li>
+                        }
+                        <li><a
+                                href="/Admin/Product/Index?name=@name&pageNumber=@Math.Min(pageNumber+1,pageCount)">&raquo;</a>
+                        </li>
+                    </ul>
+                    <a href="/Admin/Product/AddOrUpdate" class="btn btn-default btn-primary" style="color: white;">Thêm
+                        mới sản phẩm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+@section Scripts{
+<script>
+    function Search() {
+        let link = "/Admin/Product/Index?name=" + $('#input-search').val();
+        window.location.href = link;
+    }
+</script>
+}
