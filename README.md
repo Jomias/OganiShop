@@ -1,6 +1,6 @@
 # OganiShop
 
-Web bán nguyên liệu và thực phẩm
+Web bán nguyên liệu và thực phẩm sử dụng Net Core 3.1
 
 Frontend người dùng: https://themewagon.com/themes/free-bootstrap-4-html5-responsive-ecommerce-website-template-ogani/
 
