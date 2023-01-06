@@ -144,9 +144,9 @@ namespace AppManager.Areas.Admin.Controllers
             }
             var account = query.FirstOrDefault();
             var claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.NameIdentifier, account.Account)
-                };
+            {
+                new Claim(ClaimTypes.NameIdentifier, account.Account)
+            };
             claims.Add(new Claim(ClaimTypes.Role, account.Role));
             var claimIndentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIndentity));
@@ -196,7 +196,10 @@ namespace AppManager.Areas.Admin.Controllers
                 Password = Security.EncryptPlainTextToCipherText(user.Password),
                 Role = "customer",
                 CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now
+                UpdatedDate = DateTime.Now,
+                CreatedBy = user.Account,
+                UpdatedBy = user.Account,
+                Status = 0,
             });
             _dbContext.SaveChanges();
             _dbContext.UserEntities.Add(new UserEntity()
@@ -207,7 +210,10 @@ namespace AppManager.Areas.Admin.Controllers
                 Email = user.Email,
                 Phone = user.Phone,
                 CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now
+                UpdatedDate = DateTime.Now,
+                CreatedBy = user.Account,
+                UpdatedBy = user.Account,
+                Status = 0,
             });
             _dbContext.SaveChanges();
             _dbContext.AccountImageEntities.Add(new AccountImageEntity()
@@ -219,6 +225,7 @@ namespace AppManager.Areas.Admin.Controllers
                 CreatedBy = user.Account,
                 UpdatedDate = DateTime.Now,
                 UpdatedBy = user.Account,
+                Status = 0,
             });
             _dbContext.SaveChanges();
             return Redirect("/Admin/Account/Login");
