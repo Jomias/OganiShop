@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\devMaster\\Net\\AppManager\\AppManager\\AppManager.csproj": {}
+    "D:\\Test\\TestNetCore31\\OganiShop\\AppManager\\AppManager.csproj": {}
   },
   "projects": {
-    "D:\\devMaster\\Net\\AppManager\\AppManager\\AppManager.csproj": {
+    "D:\\Test\\TestNetCore31\\OganiShop\\AppManager\\AppManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\devMaster\\Net\\AppManager\\AppManager\\AppManager.csproj",
+        "projectUniqueName": "D:\\Test\\TestNetCore31\\OganiShop\\AppManager\\AppManager.csproj",
         "projectName": "AppManager",
-        "projectPath": "D:\\devMaster\\Net\\AppManager\\AppManager\\AppManager.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\devMaster\\Net\\AppManager\\AppManager\\obj\\",
+        "projectPath": "D:\\Test\\TestNetCore31\\OganiShop\\AppManager\\AppManager.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "D:\\Test\\TestNetCore31\\OganiShop\\AppManager\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -76,7 +76,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }
