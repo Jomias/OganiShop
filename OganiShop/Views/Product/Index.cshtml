@@ -191,7 +191,7 @@
     <script>
         // category
         $.ajax({
-            url: "/Category/GetAllCategories",
+            url: "/api/ACategory/GetAllCategories",
             type: "GET",
             dataType: "json",
             beforeSend: function () {
@@ -200,7 +200,7 @@
             success: function (data) {
                 $('#category').append('<li><a href="/ShoppingGrid/Index" class="category">All</a></li>');
                 data.forEach(function (item, index) {
-                    let row = `<li><a href="/ShoppingGrid/Index?id=${item.id}" class="category">${item.name}</a></li>`;
+                    let row = `<li><a href="/ShoppingGrid/Index?id=${item.Id}" class="category">${item.Name}</a></li>`;
                     $('#category').append(row);
                 })
             },

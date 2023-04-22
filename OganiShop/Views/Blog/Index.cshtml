@@ -1,8 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Blog";
+    int pageCount = (int)ViewBag.pageCount;
+    int pageNumber = (int)ViewBag.pageNumber;
+    int pageSize = (int)ViewBag.pageSize;
+    int stt = pageSize * pageNumber - (pageSize - 1);
+    int categoryId = (int)ViewBag.categoryId;
+    int tagId = (int)ViewBag.tagId;
+    string name = (string)ViewBag.name;
 }
 
-<!-- Hero Section Begin -->
 <section class="hero hero-normal">
     <div class="container">
         <div class="row">
@@ -10,20 +16,9 @@
                 <div class="hero__categories">
                     <div class="hero__categories__all">
                         <i class="fa fa-bars"></i>
-                        <span>All departments</span>
+                        <span>All categories</span>
                     </div>
-                    <ul>
-                        <li><a href="#">Fresh Meat</a></li>
-                        <li><a href="#">Vegetables</a></li>
-                        <li><a href="#">Fruit & Nut Gifts</a></li>
-                        <li><a href="#">Fresh Berries</a></li>
-                        <li><a href="#">Ocean Foods</a></li>
-                        <li><a href="#">Butter & Eggs</a></li>
-                        <li><a href="#">Fastfood</a></li>
-                        <li><a href="#">Fresh Onion</a></li>
-                        <li><a href="#">Papayaya & Crisps</a></li>
-                        <li><a href="#">Oatmeal</a></li>
-                        <li><a href="#">Fresh Bananas</a></li>
+                    <ul id="category">
                     </ul>
                 </div>
             </div>
@@ -31,10 +26,6 @@
                 <div class="hero__search">
                     <div class="hero__search__form">
                         <form action="#">
-                            <div class="hero__search__categories">
-                                All Categories
-                                <span class="arrow_carrot-down"></span>
-                            </div>
                             <input type="text" placeholder="What do yo u need?">
                             <button type="submit" class="site-btn">SEARCH</button>
                         </form>
@@ -53,8 +44,7 @@
         </div>
     </div>
 </section>
-<!-- Hero Section End -->
-<!-- Breadcrumb Section Begin -->
+
 <section class="breadcrumb-section set-bg" data-setbg="/User/img/breadcrumb.jpg">
     <div class="container">
         <div class="row">
@@ -62,7 +52,7 @@
                 <div class="breadcrumb__text">
                     <h2>Blog</h2>
                     <div class="breadcrumb__option">
-                        <a href="./index.html">Home</a>
+                        <a href="/Home/Index">Home</a>
                         <span>Blog</span>
                     </div>
                 </div>
@@ -78,24 +68,19 @@
             <div class="col-lg-4 col-md-5">
                 <div class="blog__sidebar">
                     <div class="blog__sidebar__search">
-                        <form action="#">
-                            <input type="text" placeholder="Search...">
+                        <form onsubmit="Search()">
+                            <input type="text" placeholder="Search..." name="search" value="@name" id="search">
                             <button type="submit"><span class="icon_search"></span></button>
                         </form>
                     </div>
                     <div class="blog__sidebar__item">
                         <h4>Categories</h4>
-                        <ul>
-                            <li><a href="#">All</a></li>
-                            <li><a href="#">Beauty (20)</a></li>
-                            <li><a href="#">Food (5)</a></li>
-                            <li><a href="#">Life Style (9)</a></li>
-                            <li><a href="#">Travel (10)</a></li>
+                        <ul id="blog-category">
                         </ul>
                     </div>
                     <div class="blog__sidebar__item">
                         <h4>Recent News</h4>
-                        <div class="blog__sidebar__recent">
+                        <div class="blog__sidebar__recent" id="recent-news">
                             <a href="#" class="blog__sidebar__recent__item">
                                 <div class="blog__sidebar__recent__item__pic">
                                     <img src="/User/img/blog/sidebar/sr-1.jpg" alt="">
@@ -127,139 +112,44 @@
                     </div>
                     <div class="blog__sidebar__item">
                         <h4>Search By</h4>
-                        <div class="blog__sidebar__item__tags">
-                            <a href="#">Apple</a>
-                            <a href="#">Beauty</a>
-                            <a href="#">Vegetables</a>
-                            <a href="#">Fruit</a>
-                            <a href="#">Healthy Food</a>
-                            <a href="#">Lifestyle</a>
+                        <div class="blog__sidebar__item__tags" id="tags">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-8 col-md-7">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="blog__item">
-                            <div class="blog__item__pic">
-                                <img src="/User/img/blog/blog-2.jpg" alt="">
+                    @{
+                        foreach (var item in Model)
+                        {
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="blog__item">
+                                    <div class="blog__item__pic">
+                                        <img src="@item.Image" alt="Blog-Pic" style="width: 360px; height: 260px">
+                                    </div>
+                                    <div class="blog__item__text">
+                                        <ul>
+                                            <li><i class="fa fa-calendar-o"></i> @item.CreatedDate.ToString("MMM d, yyyy")</li>
+                                            <li><i class="fa fa-comment-o"></i> 5</li>
+                                        </ul>
+                                        <h5><a href="/Blog/Detail?id=@item.Id">@item.Title</a></h5>
+                                        <p>@item.Description</p>
+                                        <a href="/Blog/Detail?id=@item.Id" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="blog__item__text">
-                                <ul>
-                                    <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                    <li><i class="fa fa-comment-o"></i> 5</li>
-                                </ul>
-                                <h5><a href="#">6 ways to prepare breakfast for 30</a></h5>
-                                <p>
-                                    Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam
-                                    quaerat
-                                </p>
-                                <a href="#" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="blog__item">
-                            <div class="blog__item__pic">
-                                <img src="/User/img/blog/blog-3.jpg" alt="">
-                            </div>
-                            <div class="blog__item__text">
-                                <ul>
-                                    <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                    <li><i class="fa fa-comment-o"></i> 5</li>
-                                </ul>
-                                <h5><a href="#">Visit the clean farm in the US</a></h5>
-                                <p>
-                                    Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam
-                                    quaerat
-                                </p>
-                                <a href="#" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="blog__item">
-                            <div class="blog__item__pic">
-                                <img src="/User/img/blog/blog-1.jpg" alt="">
-                            </div>
-                            <div class="blog__item__text">
-                                <ul>
-                                    <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                    <li><i class="fa fa-comment-o"></i> 5</li>
-                                </ul>
-                                <h5><a href="#">Cooking tips make cooking simple</a></h5>
-                                <p>
-                                    Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam
-                                    quaerat
-                                </p>
-                                <a href="#" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="blog__item">
-                            <div class="blog__item__pic">
-                                <img src="/User/img/blog/blog-4.jpg" alt="">
-                            </div>
-                            <div class="blog__item__text">
-                                <ul>
-                                    <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                    <li><i class="fa fa-comment-o"></i> 5</li>
-                                </ul>
-                                <h5><a href="#">Cooking tips make cooking simple</a></h5>
-                                <p>
-                                    Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam
-                                    quaerat
-                                </p>
-                                <a href="#" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="blog__item">
-                            <div class="blog__item__pic">
-                                <img src="/User/img/blog/blog-4.jpg" alt="">
-                            </div>
-                            <div class="blog__item__text">
-                                <ul>
-                                    <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                    <li><i class="fa fa-comment-o"></i> 5</li>
-                                </ul>
-                                <h5><a href="#">The Moment You Need To Remove Garlic From The Menu</a></h5>
-                                <p>
-                                    Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam
-                                    quaerat
-                                </p>
-                                <a href="#" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="blog__item">
-                            <div class="blog__item__pic">
-                                <img src="/User/img/blog/blog-6.jpg" alt="">
-                            </div>
-                            <div class="blog__item__text">
-                                <ul>
-                                    <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                    <li><i class="fa fa-comment-o"></i> 5</li>
-                                </ul>
-                                <h5><a href="#">Cooking tips make cooking simple</a></h5>
-                                <p>
-                                    Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam
-                                    quaerat
-                                </p>
-                                <a href="#" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
-                            </div>
-                        </div>
-                    </div>
+                        }
+                    }
                     <div class="col-lg-12">
                         <div class="product__pagination blog__pagination">
-                            <a href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <a href="#"><i class="fa fa-long-arrow-right"></i></a>
+                            <a href="/Blog/Index?search=@name&categoryId=@categoryId&tagId=@tagId&pageNumber=@Math.Min(pageNumber + 1, pageCount)"><i class="fa fa-long-arrow-left"></i></a>
+                            @{
+                                for (int i = 1; i <= pageCount; ++i)
+                                {
+                                    <a href="/Blog/Index?search=@name&categoryId=@categoryId&tagId=@tagId&pageNumber=@i">@i</a>
+                                }
+                            }
+                            <a href="/Blog/Index?search=@name&categoryId=@categoryId&tagId=@tagId&pageNumber=@Math.Min(pageNumber + 1, pageCount)"><i class="fa fa-long-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -268,3 +158,126 @@
     </div>
 </section>
 <!-- Blog Section End -->
+@section Scripts{
+    <script>
+        // category
+        $.ajax({
+            url: "/api/ACategory/GetAllCategories",
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#category').append('<li><a href="/ShoppingGrid/Index" class="category">All</a></li>');
+                data.forEach(function (item, index) {
+                    let row = `<li><a href="/ShoppingGrid/Index?id=${item.Id}" class="category">${item.Name}</a></li>`;
+                    $('#category').append(row);
+                })
+            },
+            error: function () {
+
+            },
+            complete: function () {
+
+            }
+        });
+
+        //Blog category
+        $.ajax({
+            url: "/api/ACategoryBlog/GetAllCategoryBlogs",
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#blog-category').append('<li><a href="/Blog/Index">All</a></li>');
+                let row = ''
+                data.forEach(function (item, index) {
+                    if (item.Id === '@ViewBag.categoryId') {
+                        row = `<li><a style="color:lightgreen;" href="/Blog/Index?search=@ViewBag.name&categoryId=${item.Id}&tagId=@ViewBag.tagId">${item.Name} (${item.Quantity})</a></li>`;
+                    }
+                    else {
+                        row = `<li><a href="/Blog/Index?search=@ViewBag.name&categoryId=${item.Id}&tagId=@ViewBag.tagId">${item.Name} (${item.Quantity})</a></li>`;
+                    }
+                    $('#blog-category').append(row);
+                })
+            },
+            error: function () {
+
+            },
+            complete: function () {
+
+            }
+        });
+
+        // tin tức mới nhất
+        $.ajax({
+            url: "/api/ABlog/GetLatestBlogs",
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                $('#recent-news').html('');
+                data.forEach(function (item, index) {
+                    var words = item.Title.split(" ");
+                    var a = "", b = "";
+                    for (let i = 0; i < parseInt((words.length + 1) / 2); ++i) {
+                        a += words[i].charAt(0).toUpperCase() + words[i].substring(1) + " ";
+                    }
+                    for (let i = parseInt((words.length + 1) / 2); i < words.length; ++i) {
+                        b += words[i].charAt(0).toUpperCase() + words[i].substring(1) + " ";
+                    }
+                    let date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'full' }).format(new Date(Date.parse(item.CreatedDate)));
+                    let row = `<a href="/Blog/Detail?id=${item.Id}" class="blog__sidebar__recent__item">
+                                            <div class="blog__sidebar__recent__item__pic">
+                                                <img src="${item.Image}" style="width:70px; height:70px;" alt="">
+                                            </div>
+                                            <div class="blog__sidebar__recent__item__text">
+                                                <h6>${a}<br /> ${b}</h6>
+                                                <span>${date}</span>
+                                            </div>
+                                        </a>`;
+                    $('#recent-news').append(row);
+                });
+            },
+            error: function () { },
+            complete: function () { }
+        });
+        // tags
+        $.ajax({
+            url: "/api/ATag/GetAllTags",
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+                let row = '';
+                data.forEach(function (item, index) {
+                    if (item.id === @ViewBag.tagId) {
+                        row = `<a style="color:lightgreen;" href="/Blog/Index?search=@ViewBag.name&categoryId=@ViewBag.categoryId&tagId=${item.Id}">${item.Name}</a>`
+                    }
+                    else {
+                        row = `<a href="/Blog/Index?search=@ViewBag.name&categoryId=@ViewBag.categoryId&tagId=${item.Id}">${item.Name}</a>`;
+                    }
+                    $('#tags').append(row);
+                })
+            },
+            error: function () {
+
+            },
+            complete: function () {
+
+            }
+        });
+
+        function Search() {
+            let temp = '/Blog/Index?search=' + $('input[name="search"]').val();
+            window.location.assign('temp');
+        };
+    </script>
+}

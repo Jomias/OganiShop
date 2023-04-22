@@ -9,7 +9,7 @@ public partial class Blog
 
     public string Title { get; set; } = null!;
 
-    public string Slug { get; set; } = null!;
+    public string? Slug { get; set; }
 
     public string? Description { get; set; }
 
