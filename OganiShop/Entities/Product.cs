@@ -13,7 +13,7 @@ public partial class Product
 
     public decimal? Price { get; set; }
 
-    public decimal? OldPrice { get; set; }
+    public int? Discount { get; set; }
 
     public string? Description { get; set; }
 
@@ -42,8 +42,6 @@ public partial class Product
     public bool? IsDeleted { get; set; }
 
     public virtual Category Category { get; set; } = null!;
-
-    public virtual ICollection<Discount> Discounts { get; set; } = new List<Discount>();
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 

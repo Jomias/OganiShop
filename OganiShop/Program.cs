@@ -5,13 +5,17 @@ using OganiShop.Helpers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        o.JsonSerializerOptions.PropertyNamingPolicy = null;
+    }); ;
 
 var connectionString = builder.Configuration.GetConnectionString("OganiShopContext");
 builder.Services.AddDbContext<OganiShopContext>(x => x.UseSqlServer(connectionString));
-
-
 builder.Services.AddScoped<IFileStorageService, InAppStorageService>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(Program));
     
 var app = builder.Build();

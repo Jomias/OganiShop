@@ -27,8 +27,6 @@ public partial class OganiShopContext : DbContext
 
     public virtual DbSet<ContactMessage> ContactMessages { get; set; }
 
-    public virtual DbSet<Discount> Discounts { get; set; }
-
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
@@ -204,37 +202,6 @@ public partial class OganiShopContext : DbContext
             entity.Property(e => e.Time).HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<Discount>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Discount__3214EC073E1AAB39");
-
-            entity.ToTable("Discount");
-
-            entity.Property(e => e.CreatedBy)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasDefaultValueSql("('admin')");
-            entity.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.DiscountValue).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.EndDate).HasColumnType("datetime");
-            entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
-            entity.Property(e => e.StartDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.Status).HasDefaultValueSql("((0))");
-            entity.Property(e => e.UpdatedBy)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.Discounts)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Discount__Produc__5CD6CB2B");
-        });
-
         modelBuilder.Entity<OrderDetail>(entity =>
         {
             entity.ToTable("OrderDetail");
@@ -280,11 +247,9 @@ public partial class OganiShopContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(200);
+            entity.Property(e => e.Discount).HasDefaultValueSql("((0))");
             entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
             entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.OldPrice)
-                .HasDefaultValueSql("((0))")
-                .HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Price)
                 .HasDefaultValueSql("((0))")
                 .HasColumnType("decimal(18, 0)");
@@ -312,7 +277,6 @@ public partial class OganiShopContext : DbContext
         {
             entity.ToTable("ProductImage");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(50)
                 .IsUnicode(false)
