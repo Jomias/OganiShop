@@ -27,7 +27,6 @@ namespace OganiShop.Controllers
             return View();
         }
 
-
         public IActionResult GetAccount()
         {
             var claims = HttpContext.User.Identity as ClaimsIdentity;

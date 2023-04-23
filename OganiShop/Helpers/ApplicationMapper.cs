@@ -9,7 +9,8 @@ namespace OganiShop.Helpers
         public ApplicationMapper()
         {
             CreateMap<User, UserModel>().ReverseMap();
-
+            CreateMap<ShippingAddress, ShippingAddressModel>().ReverseMap();
+            CreateMap<ContactMessage, ContactMessageModel>().ReverseMap();
         }
     }
 }

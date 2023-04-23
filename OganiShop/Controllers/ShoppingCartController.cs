@@ -49,7 +49,7 @@ namespace OganiShop.Controllers
                 }
 
                 var cart = _dbContext.ShoppingCarts
-                    .SingleOrDefault(x => x.ProductId == id && x.Customer == account && x.IsDeleted == false);
+                    .SingleOrDefault(x => x.ProductId == id && x.Customer == account && x.IsDeleted == false && x.Status == 0);
 
                 if (cart != null)
                 {

@@ -47,7 +47,6 @@
             type: "GET",
             dataType: "json",
             success: function (data) {
-                console.log(data);
                 if (data !== "") {
                     $('#log-user-humberger').text(data);
                     $('#user-login').text(data);
@@ -65,6 +64,23 @@
                 console.log(error);
             }
         })
+        function setActiveLink(event) {
+            const headerMenu = document.getElementById('header-menu');
+            const activeLink = headerMenu.querySelector('.active');
+            if (activeLink) {
+                activeLink.classList.remove('active');
+            }
+            event.target.closest('li').classList.add('active');
+        }
+        function setActiveNavItem() {
+            var url = window.location.pathname;
+            $('.header__menu ul li').removeClass('active');
+            $('.header__menu ul li a[href="' + url + '"]').parent().addClass('active');
+        }
+
+        $(document).ready(function () {
+            setActiveNavItem();
+        });
     </script>
     @RenderSection("Scripts", false)
 

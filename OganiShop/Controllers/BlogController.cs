@@ -16,14 +16,13 @@ namespace OganiShop.Controllers
         [HttpGet]
         public IActionResult Index(string search, int categoryId, int tagId, int pageNumber = 1)
         {
-            var t = _dbContext.BlogTags.Where(x => x.IsDeleted == false && x.Blog.IsDeleted == false && x.Tag.IsDeleted == false).Select(x => x.Blog.Id).ToList();
-            var query = _dbContext.Blogs
-                .Where(x => x.IsDeleted == false)
+            var t = _dbContext.BlogTags.Where(x => x.IsDeleted == false && x.Blog.IsDeleted == false && x.Tag.IsDeleted == false && (x.TagId == tagId || tagId == 0))
+                .Select(x => x.Blog).Distinct();
+            var query = t
                 .Where(x => x.CategoryBlogId == categoryId || categoryId == 0)
                 .Include(x => x.CategoryBlog)
                 .Where(x => x.CategoryBlog.IsDeleted == false)
                 .Where(x => String.IsNullOrEmpty(search) || x.Title.Trim().ToLower().Contains(search.Trim().ToLower()))
-                .Where(x => t.Contains(x.Id) || tagId == 0)
                 .OrderByDescending(x => x.CreatedDate);
             int pageSize = 4;
             int total = query.Count();
@@ -55,14 +54,14 @@ namespace OganiShop.Controllers
 
             var temp = new
             {
-                Id = query.Id,
-                Title = query.Title,
+                query.Id,
+                query.Title,
                 AuthorName = query.CreatedBy,
                 AuthorRole = "admin",
-                Content = query.Content,
+                query.Content,
                 Category = query.CategoryBlog.Name,
                 Avatar = query.Image,
-                CreatedDate = query.CreatedDate,
+                query.CreatedDate,
                 ListTags = _dbContext.BlogTags.Where(x => x.Blog.Id == id && x.IsDeleted == false).Select(x => x.Tag).Distinct().Where(x => x.IsDeleted == false)
             };
             return View(temp);

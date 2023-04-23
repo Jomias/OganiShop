@@ -19,18 +19,5 @@ namespace OganiShop.Apis
             _dbContext = dbContext;
         }
 
-        [HttpGet("GetAccount")]
-        public IActionResult GetAccount()
-        {
-            var claims = HttpContext.User.Identity as ClaimsIdentity;
-            if (claims.FindFirst(ClaimTypes.NameIdentifier) == null)
-            {
-                return Ok("");
-            }
-            var account = claims.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var user = _dbContext.Users.FirstOrDefault(x => x.Account == account);
-            string username = user.FirstName + " " + user.LastName;
-            return Ok(username);
-        }
     }
 }

@@ -51,45 +51,4 @@ app.UseEndpoints(endpoints =>
       pattern: "{controller=Home}/{action=Index}/{id?}");
 
 });
-
-app.MapWhen(context => context.Request.Path.StartsWithSegments("/Admin/Account/Login") && context.Request.Method == "POST", appBuilder =>
-{
-    appBuilder.Use(async (context, next) =>
-    {
-        await next.Invoke();
-
-        if (context.Response.StatusCode == 302 && context.Response.Headers["Location"].ToString().Contains("/Admin/Account/Login"))
-        {
-            context.Response.StatusCode = 401;
-            await context.Response.WriteAsync("Invalid login attempt.");
-        }
-    });
-});
-
-app.MapWhen(context => !context.Request.Path.StartsWithSegments("/Admin/Account/Login") || context.User.Identity.IsAuthenticated, appBuilder =>
-{
-    appBuilder.UseAuthentication();
-
-    appBuilder.Use(async (context, next) =>
-    {
-        if (context.User.Identity.IsAuthenticated)
-        {
-            var role = context.User.FindFirstValue(ClaimTypes.Role);
-            if (role == "admin")
-            {
-                await next.Invoke();
-            }
-            else
-            {
-                await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                context.Response.Redirect("/Admin/Account/Login");
-            }
-        }
-        else
-        {
-            await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            context.Response.Redirect("/Admin/Account/Login");
-        }
-    });
-});
 app.Run();
