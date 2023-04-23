@@ -228,7 +228,7 @@
                         b += words[i].charAt(0).toUpperCase() + words[i].substring(1) + " ";
                     }
                     let date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'full' }).format(new Date(Date.parse(item.CreatedDate)));
-                    let row = `<a href="/Blog/Detail?id=${item.id}" class="blog__sidebar__recent__item">
+                    let row = `<a href="/Blog/Detail?id=${item.Id}" class="blog__sidebar__recent__item">
                                             <div class="blog__sidebar__recent__item__pic">
                                                 <img src="${item.Image}" style="width:70px; height:70px;" alt="">
                                             </div>

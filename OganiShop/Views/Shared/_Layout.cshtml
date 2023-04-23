@@ -41,7 +41,31 @@
     <script src="/User/js/mixitup.min.js"></script>
     <script src="/User/js/owl.carousel.min.js"></script>
     <script src="/User/js/main.js"></script>
-
+    <script type="text/javascript">
+        $.ajax({
+            url: "/Home/GetAccount",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                if (data !== "") {
+                    $('#log-user-humberger').text(data);
+                    $('#user-login').text(data);
+                    $('#top-bar').append(`<div class="header__top__right__auth">
+                                                    <a href="/Admin/Account/LogOut"><i class="fa fa-sign-out"></i>
+                                                    </a>
+                                                </div>`);
+                    $('#menu-widget').append(`<div class="header__top__right__auth">
+                                                    <a href="/Admin/Account/LogOut"><i class="fa fa-sign-out"></i>
+                                                    </a>
+                                                </div>`);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    </script>
     @RenderSection("Scripts", false)
 
 

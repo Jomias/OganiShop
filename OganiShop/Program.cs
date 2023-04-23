@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using OganiShop.Entities;
 using OganiShop.Helpers;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +20,9 @@ builder.Services.AddDbContext<OganiShopContext>(x => x.UseSqlServer(connectionSt
 builder.Services.AddScoped<IFileStorageService, InAppStorageService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(Program));
-    
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
+    options.LoginPath = "/Admin/Account/Login";
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,7 +37,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
@@ -44,7 +49,47 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
       name: "default",
       pattern: "{controller=Home}/{action=Index}/{id?}");
+
 });
 
+app.MapWhen(context => context.Request.Path.StartsWithSegments("/Admin/Account/Login") && context.Request.Method == "POST", appBuilder =>
+{
+    appBuilder.Use(async (context, next) =>
+    {
+        await next.Invoke();
 
+        if (context.Response.StatusCode == 302 && context.Response.Headers["Location"].ToString().Contains("/Admin/Account/Login"))
+        {
+            context.Response.StatusCode = 401;
+            await context.Response.WriteAsync("Invalid login attempt.");
+        }
+    });
+});
+
+app.MapWhen(context => !context.Request.Path.StartsWithSegments("/Admin/Account/Login") || context.User.Identity.IsAuthenticated, appBuilder =>
+{
+    appBuilder.UseAuthentication();
+
+    appBuilder.Use(async (context, next) =>
+    {
+        if (context.User.Identity.IsAuthenticated)
+        {
+            var role = context.User.FindFirstValue(ClaimTypes.Role);
+            if (role == "admin")
+            {
+                await next.Invoke();
+            }
+            else
+            {
+                await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                context.Response.Redirect("/Admin/Account/Login");
+            }
+        }
+        else
+        {
+            await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            context.Response.Redirect("/Admin/Account/Login");
+        }
+    });
+});
 app.Run();

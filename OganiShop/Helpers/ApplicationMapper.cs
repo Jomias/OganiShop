@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using OganiShop.Entities;
 using OganiShop.Models;
 
 namespace OganiShop.Helpers
@@ -7,6 +8,7 @@ namespace OganiShop.Helpers
 	{
         public ApplicationMapper()
         {
+            CreateMap<User, UserModel>().ReverseMap();
 
         }
     }

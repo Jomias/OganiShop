@@ -15,6 +15,8 @@ public partial class User
 
     public string Email { get; set; } = null!;
 
+    public string Image { get; set; } = null!;
+
     public string Account { get; set; } = null!;
 
     public DateTime? CreatedDate { get; set; }

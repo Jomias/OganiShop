@@ -11,8 +11,6 @@ public partial class AccountManager
 
     public string Role { get; set; } = null!;
 
-    public string? Image { get; set; }
-
     public DateTime? CreatedDate { get; set; }
 
     public DateTime? UpdatedDate { get; set; }

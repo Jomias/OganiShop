@@ -1,6 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿
+#pragma warning disable SYSLIB0021
+using System.Security.Cryptography;
 using System.Text;
-
 namespace OganiShop.Utils
 {
     public static class Security
