@@ -18,14 +18,12 @@ namespace OganiShop.Areas.Admin.Controllers
     public class AccountController : Controller
     {
         private readonly OganiShopContext _dbContext;
-        private readonly IWebHostEnvironment _environment;
         private readonly IMapper _mapper;
         private readonly IFileStorageService _fileStorageService;
         private readonly string containerName = "account";
-        public AccountController(OganiShopContext dbContext, IWebHostEnvironment environment, IMapper mapper, IFileStorageService fileStorageService)
+        public AccountController(OganiShopContext dbContext, IMapper mapper, IFileStorageService fileStorageService)
         {
             _dbContext = dbContext;
-            _environment = environment;
             _mapper = mapper;
             _fileStorageService = fileStorageService;
         }

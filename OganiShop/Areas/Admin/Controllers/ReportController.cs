@@ -7,11 +7,11 @@ namespace OganiShop.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "admin")]
-    public class HomeController : Controller
+    public class ReportController : Controller
     {
         private readonly OganiShopContext _dbContext;
         private readonly IMapper _mapper;
-        public HomeController(OganiShopContext dbContext, IMapper mapper)
+        public ReportController(OganiShopContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
