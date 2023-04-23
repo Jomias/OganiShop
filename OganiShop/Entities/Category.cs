@@ -11,7 +11,7 @@ public partial class Category
 
     public string Slug { get; set; } = null!;
 
-    public string? Image { get; set; }
+    public string Image { get; set; } = null!;
 
     public DateTime? CreatedDate { get; set; }
 

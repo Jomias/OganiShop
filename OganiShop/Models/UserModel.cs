@@ -25,7 +25,8 @@ namespace OganiShop.Models
         [EmailAddress]
         public string Email { get; set; } = null!;
         [DisplayName("Ảnh đại diện")]
-        public string? Image { get; set; }
+        [Required]
+        public string Image { get; set; } = null!;
         [DisplayName("Ảnh đại diện")]
         [Required]
         public IFormFile? ImageFile { get; set; }
