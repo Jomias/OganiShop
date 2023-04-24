@@ -23,8 +23,6 @@ public partial class ShippingAddress
 
     public string? Note { get; set; }
 
-    public string? Account { get; set; }
-
     public DateTime? CreatedDate { get; set; }
 
     public DateTime? UpdatedDate { get; set; }

@@ -33,19 +33,6 @@ namespace OganiShop.Controllers
             return View(query);
         }
 
-        public IActionResult GetAddress()
-        {
-            var claims = HttpContext.User.Identity as ClaimsIdentity;
-            if (claims.FindFirst(ClaimTypes.NameIdentifier) == null)
-            {
-                return Json("");
-            }
-            var accClaims = claims.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var query = _dbContext.ShippingAddresses.Where(x => x.Account == accClaims);
-            return query.Any() ? Json(query.ToList()) : Json("");
-        }
-
-
         [HttpPost]
         public IActionResult Index(ShippingAddressModel location)
         {

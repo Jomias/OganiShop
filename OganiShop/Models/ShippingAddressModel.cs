@@ -5,7 +5,6 @@ namespace OganiShop.Models
     public class ShippingAddressModel
     {
         public int? Id { get; set; }
-        public string? Account { get; set; } = null!;
         [Required(ErrorMessage = "Tên không được để trống")]
         [StringLength(50, MinimumLength = 1, ErrorMessage = "Độ dài tên không được vượt quá 50 ký tự")]
         public string FirstName { get; set; } = null!;

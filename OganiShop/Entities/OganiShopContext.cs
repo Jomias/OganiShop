@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using OganiShop.Models;
 
 namespace OganiShop.Entities;
 
@@ -310,9 +309,6 @@ public partial class OganiShopContext : DbContext
 
             entity.ToTable("ShippingAddress");
 
-            entity.Property(e => e.Account)
-                .HasMaxLength(50)
-                .IsUnicode(false);
             entity.Property(e => e.Address).HasMaxLength(1000);
             entity.Property(e => e.City).HasMaxLength(30);
             entity.Property(e => e.Country).HasMaxLength(30);
@@ -455,6 +451,4 @@ public partial class OganiShopContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-    public DbSet<OganiShop.Models.CategoryModel>? CategoryModel { get; set; }
 }

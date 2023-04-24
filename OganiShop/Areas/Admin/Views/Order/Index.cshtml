@@ -30,7 +30,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Order List</h3>
-                        <a class="btn btn-primary float-right" href="/Admin/Order/AddOrEdit">Add Order</a>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -38,9 +37,11 @@
                             <thead>
                                 <tr>
                                     <th class="align-middle">STT</th>
-                                    <th class="align-middle">Name</th>
-                                    <th class="align-middle">Slug</th>
-                                    <th class="align-middle">Image</th>
+                                    <th class="align-middle">Id</th>
+                                    <th class="align-middle">Account</th>
+                                    <th class="align-middle">Total Price</th>
+                                    <th class="align-middle">AddressId</th>
+                                    <th class="align-middle">Status</th>
                                     <th class="align-middle">Actions</th>
                                 </tr>
                             </thead>
@@ -51,17 +52,46 @@
                                     {
                                         <tr>
                                             <td class="align-middle">@stt</td>
-                                            <td class="align-middle">@order.Name</td>
-                                            <td class="align-middle">@order.Slug</td>
-                                            <td class="align-middle"><img src="@order.Image" alt="@order.Name" class="img-fluid rounded-circle" style="width: 50px; height:50px"></td>
+                                            <td class="align-middle">@order.Id</td>
+                                            <td class="align-middle">@order.Account</td>
+                                            <td class="align-middle">$@order.TotalPrice</td>
+                                            <td class="align-middle">@order.AddressId</td>
+                                            @if (order.Status == 0)
+                                            {
+                                                <td class="align-middle"><span class="btn btn-warning">Pending</span></td>
+                                            }
+                                            else if (order.Status == 1)
+                                            {
+                                                <td class="align-middle"><span class="btn btn-success">Accepted</span></td>
+                                            }
+                                            else if (order.Status == 2)
+                                            {
+                                                <td class="align-middle"><span class="btn btn-info">Shipping</span></td>
+                                            }
+                                            else if (order.Status == 3)
+                                            {
+                                                <td class="align-middle"><span class="btn btn-primary">Done</span></td>
+                                            }
                                             <td class="align-middle">
                                                 <div class="dropdown">
                                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="orderActionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Actions
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="orderActionsDropdown">
-                                                        <a class="dropdown-item" href="/Admin/Order/AddOrEdit?Id=@order.Id">Edit</a>
+                                                        <a class="dropdown-item" href="/Admin/Order/Detail?Id=@order.Id">Detail</a>
                                                         <a class="dropdown-item delete-btn" href="/Admin/Order/Delete?Id=@order.Id">Delete</a>
+                                                        @if (order.Status == 0)
+                                                        {
+                                                            <a class="dropdown-item" href="/Admin/Order/Accepted?Id=@order.Id">Accepted</a>
+                                                        }
+                                                        else if (order.Status == 1)
+                                                        {
+                                                            <a class="dropdown-item" href="/Admin/Order/Shipping?Id=@order.Id">Shipping</a>
+                                                        }
+                                                        else if (order.Status == 2)
+                                                        {
+                                                            <a class="dropdown-item" href="/Admin/Order/Done?Id=@order.Id">Done</a>
+                                                        }
                                                     </div>
                                                 </div>
                                             </td>
@@ -72,11 +102,13 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>STT</th>
-                                    <th>Name</th>
-                                    <th>Slug</th>
-                                    <th>Image</th>
-                                    <th>Actions</th>
+                                    <th class="align-middle">STT</th>
+                                    <th class="align-middle">Id</th>
+                                    <th class="align-middle">Account</th>
+                                    <th class="align-middle">Total Price</th>
+                                    <th class="align-middle">AddressId</th>
+                                    <th class="align-middle">Status</th>
+                                    <th class="align-middle">Actions</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -109,7 +141,7 @@
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": true, "autoWidth": false,
                 "lengthMenu": [5, 10, 25, 50, 100],
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["copy", "csv", "excel", "pdf", "print"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             //$('#example2').DataTable({
             //    "paging": true,

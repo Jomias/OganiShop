@@ -1,0 +1,176 @@
+﻿@{
+    ViewData["Title"] = "AddOrEdit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles{
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/Admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Order</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/Admin/Order">Order</a></li>
+                    <li class="breadcrumb-item active">
+                        Detail
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Shipping Address</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label name="FirstName" class="control-label">First Name</label>
+                                <input type="text" name="FirstName" class="form-control" readonly value="@Model.Address.FirstName"/>
+                            </div>
+                            <div class="form-group">
+                                <label name="LastName" class="control-label">Last Name</label>
+                                <input type="text" name="LastName" class="form-control" readonly value="@Model.Address.LastName" />
+                            </div>
+                            <div class="form-group">
+                                <label name="Address" class="control-label">Address</label>
+                                <input type="text" name="Address" class="form-control" readonly value="@Model.Address.Address" />
+                            </div>
+                            <div class="form-group">
+                                <label name="City" class="control-label">City</label>
+                                <input type="text" name="City" class="form-control" readonly value="@Model.Address.City" />
+                            </div>
+                            <div class="form-group">
+                                <label name="Country" class="control-label">Country</label>
+                                <input type="text" name="Country" class="form-control" readonly value="@Model.Address.Country" />
+                            </div>
+                            <div class="form-group">
+                                <label name="PostCode" class="control-label">Post Code</label>
+                                <input type="text" name="PostCode" class="form-control" readonly value="@Model.Address.PostCode" />
+                            </div>
+                            <div class="form-group">
+                                <label name="Note" class="control-label">Note</label>
+                                <input type="text" name="Note" class="form-control" readonly value="@Model.Address.Note" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Order: #@Model.Id</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped text-center" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th class="align-middle">STT</th>
+                                    <th class="align-middle">Product</th>
+                                    <th class="align-middle">Quantity</th>
+                                    <th class="align-middle">Price</th>
+                                    <th class="align-middle">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int stt = 1;
+                                    foreach (var order in Model.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td class="align-middle">@stt</td>
+                                            <td class="align-middle">@order.Product.Name</td>
+                                            <td class="align-middle">@order.Quantity</td>
+                                            <td class="align-middle">$@order.Price</td>
+                                            <td class="align-middle">$@(order.Price * order.Quantity)</td>
+
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="align-middle"></th>
+                                    <th class="align-middle"></th>
+                                    <th class="align-middle"></th>
+                                    <th class="align-middle">Total</th>
+                                    <th class="align-middle">$@Model.TotalPrice</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        @if (Model.Status == 0)
+                        {
+                            <a class="btn btn-primary" href="/Admin/Order/Accepted?Id=@Model.Id">Accepted</a>
+                        }
+                        else if (Model.Status == 1)
+                        {
+                            <a class="btn btn-primary" href="/Admin/Order/Shipping?Id=@Model.Id">Shipping</a>
+                        }
+                        else if (Model.Status == 2)
+                        {
+                            <a class="btn btn-primary" href="/Admin/Order/Done?Id=@Model.Id">Done</a>
+                        }
+                        <a href="/Admin/Order" class="float-right btn btn-secondary">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts{
+    <script src="/Admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script src="/Admin/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/Admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/Admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/Admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/Admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/Admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/Admin/plugins/jszip/jszip.min.js"></script>
+    <script src="/Admin/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/Admin/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/Admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/Admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/Admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": true, "autoWidth": true,
+                "lengthMenu": [5, 10, 25, 50, 100],
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            //$('#example2').DataTable({
+            //    "paging": true,
+            //    "lengthChange": false,
+            //    "searching": false,
+            //    "ordering": true,
+            //    "info": true,
+            //    "autoWidth": false,
+            //    "responsive": true,
+            //});
+        });
+    </script>
+}
+
