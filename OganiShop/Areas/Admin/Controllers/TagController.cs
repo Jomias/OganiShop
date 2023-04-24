@@ -75,8 +75,6 @@ namespace OganiShop.Areas.Admin.Controllers
             if (model.Slug == null && model.Name != null)
             {
                 model.Slug = Slug.ToUrlSlug(model.Name);
-                ModelState.SetModelValue("Slug", new ValueProviderResult(model.Slug));
-
             }
 
             if (!ModelState.IsValid)

@@ -10,12 +10,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Tag</h1>
+                <h1>Product</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/Admin/">Home</a></li>
-                    <li class="breadcrumb-item active">Tag</li>
+                    <li class="breadcrumb-item active">Product</li>
                 </ol>
             </div>
         </div>
@@ -28,8 +28,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Tag List</h3>
-                        <a class="btn btn-primary float-right" href="/Admin/Tag/AddOrEdit">Add Tag</a>
+                        <h3 class="card-title">Product List</h3>
+                        <a class="btn btn-primary float-right" href="/Admin/Product/AddOrEdit">Add Product</a>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -38,22 +38,37 @@
                                 <tr>
                                     <th class="align-middle">STT</th>
                                     <th class="align-middle">Name</th>
-                                    <th class="align-middle">Slug</th>
+                                    <th class="align-middle">Price</th>
+                                    <th class="align-middle">Discount</th>
+                                    <th class="align-middle">Description</th>
+                                    <th class="align-middle">Summary</th>
+                                    <th class="align-middle">Weight</th>
+                                    <th class="align-middle">Unit</th>
+                                    <th class="align-middle">Quantity</th>
+                                    <th class="align-middle">Category</th>
                                     <th class="align-middle">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @{
                                     int stt = 1;
-                                    foreach (var tag in Model)
+                                    foreach (var product in Model)
                                     {
                                         <tr>
                                             <td class="align-middle">@stt</td>
-                                            <td class="align-middle">@tag.Name</td>
-                                            <td class="align-middle">@tag.Slug</td>
+                                            <td class="align-middle">@product.Name</td>
+                                            <td class="align-middle">@product.Price</td>
+                                            <td class="align-middle">@product.Discount</td>
+                                            <td class="align-middle">@product.Description</td>
+                                            <td class="align-middle">@product.Summary</td>
+                                            <td class="align-middle">@product.Weight</td>
+                                            <td class="align-middle">@product.Discount</td>
+                                            <td class="align-middle">@product.Quantity</td>
+                                            <td class="align-middle">@product.Category.Name</td>
                                             <td class="align-middle">
-                                                <a class="btn btn-secondary" href="/Admin/Tag/AddOrEdit?Id=@tag.Id">Edit</a> |
-                                                <a class="btn btn-danger delete-btn" href="/Admin/Tag/Delete?Id=@tag.Id">Delete</a>
+                                                <a class="btn btn-secondary m-1" href="/Admin/Product/AddOrEdit?Id=@product.Id">Edit</a>
+                                                <a class="btn btn-danger delete-btn m-1" href="/Admin/Product/Delete?Id=@product.Id">Delete</a>
+                                                <a class="btn btn-primary m-1" href="/Admin/ProductImage?Id=@product.Id">Image</a>
                                             </td>
                                         </tr>
                                         stt++;
@@ -62,10 +77,17 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>STT</th>
-                                    <th>Name</th>
-                                    <th>Slug</th>
-                                    <th>Actions</th>
+                                    <th class="align-middle">STT</th>
+                                    <th class="align-middle">Name</th>
+                                    <th class="align-middle">Price</th>
+                                    <th class="align-middle">Discount</th>
+                                    <th class="align-middle">Description</th>
+                                    <th class="align-middle">Summary</th>
+                                    <th class="align-middle">Weight</th>
+                                    <th class="align-middle">Unit</th>
+                                    <th class="align-middle">Quantity</th>
+                                    <th class="align-middle">Category</th>
+                                    <th class="align-middle">Actions</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -108,6 +130,13 @@
             //    "autoWidth": false,
             //    "responsive": true,
             //});
+            $('.delete-btn').on('click', function (e) {
+                e.preventDefault();
+                const confirmation = confirm('Are you sure you want to delete this product?');
+                if (confirmation) {
+                    window.location.href = e.target.href;
+                }
+            });
         });
 
         $(document).ready(function () {
@@ -115,15 +144,7 @@
             if (message) {
                 alert(message);
             }
+
         });
-            $(document).ready(function () {
-                $('.delete-btn').on('click', function (e) {
-                    e.preventDefault();
-                    const confirmation = confirm('Are you sure you want to delete this Tag?');
-                    if (confirmation) {
-                        window.location.href = e.target.href;
-                    }
-                });
-            });
     </script>
 }

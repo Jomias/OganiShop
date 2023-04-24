@@ -10,12 +10,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Tag</h1>
+                <h1>ProductImage</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/Admin/">Home</a></li>
-                    <li class="breadcrumb-item active">Tag</li>
+                    <li class="breadcrumb-item active">ProductImage</li>
                 </ol>
             </div>
         </div>
@@ -28,8 +28,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Tag List</h3>
-                        <a class="btn btn-primary float-right" href="/Admin/Tag/AddOrEdit">Add Tag</a>
+                        <h3 class="card-title">ProductImage List</h3>
+                        <a class="btn btn-primary float-right" href="/Admin/ProductImage/AddOrEdit?ProductId=@ViewBag.Id">Add ProductImage</a>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -38,22 +38,29 @@
                                 <tr>
                                     <th class="align-middle">STT</th>
                                     <th class="align-middle">Name</th>
-                                    <th class="align-middle">Slug</th>
+                                    <th class="align-middle">Path</th>
+                                    <th class="align-middle">Image</th>
                                     <th class="align-middle">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @{
                                     int stt = 1;
-                                    foreach (var tag in Model)
+                                    foreach (var productImage in Model)
                                     {
                                         <tr>
                                             <td class="align-middle">@stt</td>
-                                            <td class="align-middle">@tag.Name</td>
-                                            <td class="align-middle">@tag.Slug</td>
+                                            <td class="align-middle">@productImage.Name</td>
+                                            <td class="align-middle">@productImage.Path</td>
+                                            <td class="align-middle"><img src="@productImage.Path" alt="@productImage.Path" class="img-fluid rounded-circle" style="width: 100px"></td>
+
                                             <td class="align-middle">
-                                                <a class="btn btn-secondary" href="/Admin/Tag/AddOrEdit?Id=@tag.Id">Edit</a> |
-                                                <a class="btn btn-danger delete-btn" href="/Admin/Tag/Delete?Id=@tag.Id">Delete</a>
+                                                <a class="btn btn-secondary m-1" href="/Admin/ProductImage/AddOrEdit?Id=@productImage.Id">Edit</a>
+                                                @if (productImage.IsAvatar == false)
+                                                {
+                                                    <a class="btn btn-danger delete-btn m-1" href="/Admin/ProductImage/Delete?Id=@productImage.Id">Delete</a>
+                                                    <a class="btn btn-primary m-1" href="/Admin/ProductImage/SetAvatar?Id=@productImage.Id">Set Avatar</a>
+                                                } 
                                             </td>
                                         </tr>
                                         stt++;
@@ -62,10 +69,11 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>STT</th>
-                                    <th>Name</th>
-                                    <th>Slug</th>
-                                    <th>Actions</th>
+                                    <th class="align-middle">STT</th>
+                                    <th class="align-middle">Name</th>
+                                    <th class="align-middle">Path</th>
+                                    <th class="align-middle">Image</th>
+                                    <th class="align-middle">Actions</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -108,6 +116,13 @@
             //    "autoWidth": false,
             //    "responsive": true,
             //});
+            $('.delete-btn').on('click', function (e) {
+                e.preventDefault();
+                const confirmation = confirm('Are you sure you want to delete this productImage?');
+                if (confirmation) {
+                    window.location.href = e.target.href;
+                }
+            });
         });
 
         $(document).ready(function () {
@@ -115,15 +130,7 @@
             if (message) {
                 alert(message);
             }
+
         });
-            $(document).ready(function () {
-                $('.delete-btn').on('click', function (e) {
-                    e.preventDefault();
-                    const confirmation = confirm('Are you sure you want to delete this Tag?');
-                    if (confirmation) {
-                        window.location.href = e.target.href;
-                    }
-                });
-            });
     </script>
 }
