@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using OganiShop.Entities;
 using OganiShop.Helpers;
 using OganiShop.Models;
+using OganiShop.Utils;
 using System.Security.Claims;
 
 namespace OganiShop.Areas.Admin.Controllers
@@ -62,16 +64,42 @@ namespace OganiShop.Areas.Admin.Controllers
         public IActionResult Profile()
         {
             var temp = _dbContext.Users.FirstOrDefault(x => x.Account == GetAccount());
-            return View(new UserModel()
+            return View(_mapper.Map<UserUpdateModel>(temp));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Profile(UserUpdateModel model, IFormFile? ImageFile)
+        {
+            ViewBag.Id = model.Id;
+            if (ImageFile != null)
             {
-                Id = temp.Id,
-                FirstName = temp.FirstName,
-                LastName = temp.LastName,
-                Phone = temp.Phone,
-                Email = temp.Email,
-                Image = temp.Image,
-                Account = GetAccount(),
-            });
+                if (model.Image == null)
+                {
+                    model.Image = await _fileStorageService.SaveFile(containerName, ImageFile);
+                }
+                else
+                {
+                    model.Image = await _fileStorageService.EditFile(containerName, ImageFile, model.Image);
+                }
+                ModelState["Image"].ValidationState = ModelValidationState.Valid;
+                ModelState["Image"].RawValue = model.Image;
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var temp = _mapper.Map<User>(model);
+
+            var account = GetAccount();
+
+            temp.UpdatedDate = DateTime.Now;
+            temp.UpdatedBy = account;
+            _dbContext.Update(temp);
+            _dbContext.SaveChanges();
+            TempData["Message"] = "Edit User Successfully";
+            return RedirectToAction("Index");
+
         }
     }
 }

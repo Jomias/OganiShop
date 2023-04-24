@@ -18,6 +18,7 @@ namespace OganiShop.Helpers
             CreateMap<ProductImage, ProductImageModel>().ReverseMap();
             CreateMap<Blog, BlogModel>().ReverseMap();
             CreateMap<BlogTag, BlogTagModel>().ReverseMap();
+            CreateMap<User, UserUpdateModel>().ReverseMap();
 
         }
     }
