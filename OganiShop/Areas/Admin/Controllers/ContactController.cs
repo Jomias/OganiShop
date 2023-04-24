@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OganiShop.Entities;
 using OganiShop.Helpers;
+using System.Security.Claims;
 
 namespace OganiShop.Areas.Admin.Controllers
 {
@@ -19,7 +20,40 @@ namespace OganiShop.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var temp = _dbContext.ContactMessages.OrderByDescending(x => x.Time).Where(x => x.IsDeleted == false).ToList();
+            return View(temp);
+        }
+
+        public string GetAccount()
+        {
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            if (claims != null)
+            {
+                var account = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (account != null)
+                {
+                    return account;
+                }
+            }
+            return string.Empty;
+        }
+
+        public IActionResult Delete(int Id)
+        {
+            var entity = _dbContext.ContactMessages.Find(Id);
+            if (entity == null)
+            {
+                TempData["Message"] = "Can't Remove";
+                return RedirectToAction("Index");
+            }
+            entity.IsDeleted = true;
+            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedBy = GetAccount();
+            _dbContext.Update(entity);
+            _dbContext.SaveChanges();
+            TempData["Message"] = "Remove Messages Successfully";
+            return RedirectToAction("Index");
+
         }
     }
 }
