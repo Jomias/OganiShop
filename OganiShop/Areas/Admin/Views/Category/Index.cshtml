@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="/Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="/Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="/Admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
 }
 
 <!-- Content Header (Page header) -->
@@ -52,11 +53,19 @@
                                             <td class="align-middle">@stt</td>
                                             <td class="align-middle">@category.Name</td>
                                             <td class="align-middle">@category.Slug</td>
-                                            <td class="align-middle"><img src="@category.Image" alt="@category.Name" class="img-fluid rounded-circle" style="width: 200px"></td>
+                                            <td class="align-middle"><img src="@category.Image" alt="@category.Name" class="img-fluid rounded-circle" style="width: 50px; height:50px"></td>
                                             <td class="align-middle">
-                                                <a class="btn btn-secondary" href="/Admin/Category/AddOrEdit?Id=@category.Id">Edit</a> |
-                                                <a class="btn btn-danger delete-btn" href="/Admin/Category/Delete?Id=@category.Id">Delete</a>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryActionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Actions
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="categoryActionsDropdown">
+                                                        <a class="dropdown-item" href="/Admin/Category/AddOrEdit?Id=@category.Id">Edit</a>
+                                                        <a class="dropdown-item delete-btn" href="/Admin/Category/Delete?Id=@category.Id">Delete</a>
+                                                    </div>
+                                                </div>
                                             </td>
+
                                         </tr>
                                         stt++;
                                     }
@@ -100,6 +109,7 @@
         $(function () {
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": true, "autoWidth": false,
+                "lengthMenu": [5, 10, 25, 50, 100]
                 //"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             //$('#example2').DataTable({

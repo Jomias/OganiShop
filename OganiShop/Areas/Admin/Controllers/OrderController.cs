@@ -18,7 +18,9 @@ namespace OganiShop.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var temp = _dbContext.ShopOrders.Where(x => x.IsDeleted == false).OrderByDescending(x => x.CreatedDate).ToList();
+            return View(temp);
         }
+
     }
 }

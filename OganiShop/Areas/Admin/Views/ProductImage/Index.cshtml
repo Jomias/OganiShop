@@ -55,12 +55,19 @@
                                             <td class="align-middle"><img src="@productImage.Path" alt="@productImage.Path" class="img-fluid rounded-circle" style="width: 100px"></td>
 
                                             <td class="align-middle">
-                                                <a class="btn btn-secondary m-1" href="/Admin/ProductImage/AddOrEdit?Id=@productImage.Id">Edit</a>
-                                                @if (productImage.IsAvatar == false)
-                                                {
-                                                    <a class="btn btn-danger delete-btn m-1" href="/Admin/ProductImage/Delete?Id=@productImage.Id">Delete</a>
-                                                    <a class="btn btn-primary m-1" href="/Admin/ProductImage/SetAvatar?Id=@productImage.Id">Set Avatar</a>
-                                                } 
+                                                <div class="dropdown">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="imageActionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Actions
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="imageActionsDropdown">
+                                                        <a class="dropdown-item" href="/Admin/ProductImage/AddOrEdit?Id=@productImage.Id">Edit</a>
+                                                        @if (productImage.IsAvatar == false)
+                                                        {
+                                                            <a class="dropdown-item delete-btn" href="/Admin/ProductImage/Delete?Id=@productImage.Id">Delete</a>
+                                                            <a class="dropdown-item" href="/Admin/ProductImage/SetAvatar?Id=@productImage.Id">Set Avatar</a>
+                                                        }
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                         stt++;
@@ -105,6 +112,7 @@
         $(function () {
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": true, "autoWidth": false,
+                "lengthMenu": [5, 10, 25, 50, 100]
                 //"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             //$('#example2').DataTable({

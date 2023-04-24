@@ -13,7 +13,11 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="/Admin/dist/css/adminlte.min.css">
     @RenderSection("Styles", false)
-
+    <style>
+        .table td {
+            padding: 0.25rem !important;
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -39,6 +43,22 @@
     <script src="/Admin/dist/js/adminlte.min.js"></script>
 
     @RenderSection("Scripts", false)
-
+    <script type="text/javascript">
+        $.ajax({
+            url: "/Admin/Home/GetAccount",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                if (data !== "") {
+                    console.log(data);
+                    $('#anhDaiDien').attr('src', data.Image);
+                    $('#userName').text(data.Name);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    </script>
 </body>
 </html>
