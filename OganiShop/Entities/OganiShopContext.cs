@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using OganiShop.Models;
 
 namespace OganiShop.Entities;
 
@@ -454,4 +455,6 @@ public partial class OganiShopContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    public DbSet<OganiShop.Models.CategoryModel>? CategoryModel { get; set; }
 }

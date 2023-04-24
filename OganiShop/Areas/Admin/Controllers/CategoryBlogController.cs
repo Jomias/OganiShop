@@ -12,21 +12,18 @@ namespace OganiShop.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "admin")]
-    public class CategoryController : Controller
+    public class CategoryBlogController : Controller
     {
         private readonly OganiShopContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly IFileStorageService _fileStorageService;
-        private readonly string containerName = "category";
-        public CategoryController(OganiShopContext dbContext, IMapper mapper, IFileStorageService fileStorageService)
+        public CategoryBlogController(OganiShopContext dbContext, IMapper mapper, IFileStorageService fileStorageService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
-            _fileStorageService = fileStorageService;
         }
         public IActionResult Index()
         {
-            var temp =_dbContext.Categories.Where(x => x.IsDeleted == false).ToList();
+            var temp =_dbContext.CategoryBlogs.Where(x => x.IsDeleted == false).ToList();
             return View(temp);
         }
 
@@ -46,18 +43,17 @@ namespace OganiShop.Areas.Admin.Controllers
         public IActionResult AddOrEdit(int Id = 0)
         {
             ViewBag.Id = Id;
-            var temp = _dbContext.Categories.Find(Id);
+            var temp = _dbContext.CategoryBlogs.Find(Id);
             if (temp == null)
             {
-                return View(new CategoryModel());
+                return View(new CategoryBlogModel());
             }
 
-            return View(_mapper.Map<CategoryModel>(temp));
+            return View(_mapper.Map<CategoryBlogModel>(temp));
         }
         public IActionResult Delete(int Id)
         {
-
-            var entity = _dbContext.Categories.Find(Id);
+            var entity = _dbContext.CategoryBlogs.Find(Id);
             if (entity == null) 
             {
                 TempData["Message"] = "Can't Remove";
@@ -68,27 +64,14 @@ namespace OganiShop.Areas.Admin.Controllers
             entity.UpdatedBy = GetAccount();
             _dbContext.Update(entity);
             _dbContext.SaveChanges();
-            TempData["Message"] = "Remove Category Successfully";
+            TempData["Message"] = "Remove CategoryBlog Successfully";
             return RedirectToAction("Index");
 
         }
         [HttpPost]
-        public async Task<IActionResult> AddOrEdit(CategoryModel model, IFormFile? ImageFile)
+        public IActionResult AddOrEdit(CategoryBlogModel model)
         {
             ViewBag.Id = model.Id == null ? 0 : model.Id;
-            if (ImageFile != null) 
-            {
-                if (model.Image == null)
-                {
-                    model.Image = await _fileStorageService.SaveFile(containerName, ImageFile);
-                }
-                else
-                {
-                    model.Image = await _fileStorageService.EditFile(containerName, ImageFile, model.Image);
-                }
-                ModelState["Image"].ValidationState = ModelValidationState.Valid;
-                ModelState["Image"].RawValue = model.Image;
-            }
             if (model.Slug == null && model.Name != null)
             {
                 model.Slug = Slug.ToUrlSlug(model.Name);
@@ -101,12 +84,12 @@ namespace OganiShop.Areas.Admin.Controllers
                 return View(model);
             }
 
-            var temp = _mapper.Map<Category>(model);
+            var temp = _mapper.Map<CategoryBlog>(model);
             if (model.Id == null)
             {
                 _dbContext.Add(temp);
                 _dbContext.SaveChanges();
-                TempData["Message"] = "Add Category Successfully";
+                TempData["Message"] = "Add CategoryBlog Successfully";
                 return RedirectToAction("Index");
             }
             var account = GetAccount();
@@ -115,9 +98,8 @@ namespace OganiShop.Areas.Admin.Controllers
             temp.UpdatedBy = account;
             _dbContext.Update(temp);
             _dbContext.SaveChanges();
-            TempData["Message"] = "Edit Category Successfully";
+            TempData["Message"] = "Edit CategoryBlog Successfully";
             return RedirectToAction("Index");
-
         }
     }
 }

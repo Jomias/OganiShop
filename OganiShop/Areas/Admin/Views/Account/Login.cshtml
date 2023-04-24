@@ -16,7 +16,7 @@
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="/Admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/Admin/dist/css/adminlte.min.css">
+    <link rel="s    tylesheet" href="/Admin/dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
@@ -34,7 +34,7 @@
                         <p>@TempData["ErrorMessage"]</p>
                     </div>
                 }
-                <form action="/Admin/Account/Login" method="post">
+                <form action="/Admin/Account/Login" method="post" enctype="multipart/form-data">
                     <input type="text" name="ReturnUrl" value="@ViewBag.ReturnUrl" hidden />
                     <span asp-validation-for="Account" class="text-danger"></span>
                     <div class="input-group mb-3">

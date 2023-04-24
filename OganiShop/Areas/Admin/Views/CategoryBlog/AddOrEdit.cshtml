@@ -1,0 +1,89 @@
+﻿@model OganiShop.Models.CategoryBlogModel
+
+@{
+    ViewData["Title"] = "AddOrEdit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>CategoryBlog</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/Admin/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/Admin/CategoryBlog">CategoryBlog</a></li>
+
+                    @if (ViewBag.Id == 0)
+                    {
+                        <li class="breadcrumb-item active">
+                            Add
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item active">
+                            Edit
+                        </li>
+                    }
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh mục</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-action="AddOrEdit" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CreatedDate" />
+                        <input type="hidden" asp-for="CreatedBy" />
+                        <input type="hidden" asp-for="UpdatedDate" />
+                        <input type="hidden" asp-for="UpdatedBy" />
+                        <input type="hidden" asp-for="Status" />
+                        <input type="hidden" asp-for="IsDeleted" />
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <span class="text-danger">*</span>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Slug" class="control-label"></label>
+                                <input asp-for="Slug" class="form-control" />
+                                <span asp-validation-for="Slug" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a asp-action="Index" class="float-right btn btn-secondary">Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts{
+    <script src="/Admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script>
+    </script>
+}
+
