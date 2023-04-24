@@ -28,6 +28,21 @@ namespace OganiShop.Apis
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("GetAllTagByBlogId")]
+        public IActionResult GetAllTagByBlogId(int BlogId)
+        {
+            try
+            {
+                var tags = _dbContext.Tags
+                    .Where(x => x.IsDeleted == false)
+                    .Where(tag => !tag.BlogTags.Any(blogTag => blogTag.BlogId == BlogId && blogTag.IsDeleted == false)).ToList();
+                return Ok(tags);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }

@@ -5,7 +5,7 @@ namespace OganiShop.Models
 {
     public class BlogModel : BaseModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [Required]
         [MaxLength(100)]
         [DisplayName("Tiêu đề")]
