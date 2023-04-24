@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using OganiShop.Helpers;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace OganiShop.Areas.Admin.Controllers
 {
@@ -111,12 +112,8 @@ namespace OganiShop.Areas.Admin.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register(UserModel user)
+        public async Task<IActionResult> Register(UserModel user, IFormFile? ImageFile)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(user);
-            }
             var query = _dbContext.Users.Where(x => x.Account == user.Account || x.Email == user.Email)
                                                .Select(x => new User() { });
             if (query.Any())
@@ -125,9 +122,16 @@ namespace OganiShop.Areas.Admin.Controllers
                 return Redirect("/Admin/Account/Register");
             }
 
-            if (user.ImageFile != null)
+            if (ImageFile != null)
             {
-                user.Image = await _fileStorageService.SaveFile(containerName, user.ImageFile);
+                user.Image = await _fileStorageService.SaveFile(containerName, ImageFile);
+                ModelState["Image"].ValidationState = ModelValidationState.Valid;
+                ModelState["Image"].RawValue = user.Image;
+            } 
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Nhập đầy đủ các trường!";
+                return View(user);
             }
             user.CreatedBy = user.Account;
             _dbContext.AccountManagers.Add(new AccountManager()
@@ -147,8 +151,12 @@ namespace OganiShop.Areas.Admin.Controllers
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext.Response.Cookies.Delete("Account");
+            foreach (var cookieName in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookieName);
+            }
             return Redirect("/Admin/Account/Login");
         }
+
     }
 }

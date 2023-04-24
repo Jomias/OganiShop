@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OganiShop.Entities;
 using OganiShop.Helpers;
+using OganiShop.Models;
 using System.Security.Claims;
 
 namespace OganiShop.Areas.Admin.Controllers
@@ -58,6 +59,19 @@ namespace OganiShop.Areas.Admin.Controllers
             TempData["Message"] = "User role updated successfully";
             return RedirectToAction("Index");
         }
-
+        public IActionResult Profile()
+        {
+            var temp = _dbContext.Users.FirstOrDefault(x => x.Account == GetAccount());
+            return View(new UserModel()
+            {
+                Id = temp.Id,
+                FirstName = temp.FirstName,
+                LastName = temp.LastName,
+                Phone = temp.Phone,
+                Email = temp.Email,
+                Image = temp.Image,
+                Account = GetAccount(),
+            });
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OganiShop.Models
 {
@@ -23,12 +24,10 @@ namespace OganiShop.Models
         public string Phone { get; set; } = null!;
         [Required(ErrorMessage = "Email không được để trống")]
         [EmailAddress]
+        [DisplayName("Địa chỉ Email")]
         public string Email { get; set; } = null!;
         [DisplayName("Ảnh đại diện")]
         [Required]
         public string Image { get; set; } = null!;
-        [DisplayName("Ảnh đại diện")]
-        [Required]
-        public IFormFile? ImageFile { get; set; }
     }
 }
