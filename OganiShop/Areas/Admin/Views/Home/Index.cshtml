@@ -1,21 +1,287 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="text-center display-4">Search</h2>
-<div class="row">
-    <div class="col-md-8 offset-md-2">
-        <form action="simple-results.html">
-            <div class="input-group">
-                <input type="search" class="form-control form-control-lg" placeholder="Type your keywords here">
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-lg btn-default">
-                        <i class="fa fa-search"></i>
-                    </button>
+
+@section Styles {
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="/Admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/Admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="/Admin/plugins/jqvmap/jqvmap.min.css">
+}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Dashboard</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard v1</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@ViewBag.OrderNumber</h3>
+                        <p>New Orders</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-        </form>
-    </div>
-</div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@ViewBag.CategoryNumber</h3>
+                        <p>Categories</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@ViewBag.UserNumber</h3>
+
+                        <p>User Registrations</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@ViewBag.ProductNumber</h3>
+
+                        <p>Unique Products</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- DONUT CHART -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Số lượng Order theo danh mục</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <div class="col-md-6">
+                <!-- LINE CHART -->
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Lượng Order theo ngày</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+@section Scripts{
+    <!-- ChartJS -->
+    <script src="/Admin/plugins/chart.js/Chart.min.js"></script>
+    <!-- Sparkline -->
+    <script src="/Admin/plugins/sparklines/sparkline.js"></script>
+    <!-- JQVMap -->
+    <script src="/Admin/plugins/jqvmap/jquery.vmap.min.js"></script>
+    <script src="/Admin/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="/Admin/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="/Admin/plugins/moment/moment.min.js"></script>
+    <script src="/Admin/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="/Admin/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+    <script src="/Admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script>
+        $(function () {
+            var donutChartCanvas = $('#donutChart').get(0).getContext('2d');
+
+            // retrieve data using AJAX and update chart
+            $.ajax({
+                url: '/Admin/Home/GetCategoryOrderQuantity',
+                dataType: 'json',
+                success: function (data) {
+                    var labels = [];
+                    var values = [];
+                    //var backgroundColors = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
+                    var total = 0;
+
+                    for (var i = 0; i < data.length; i++) {
+                        labels.push(data[i].label);
+                        values.push(data[i].value);
+                        total += data[i].value;
+                    }
+
+                    var backgroundColors = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var percent = (values[i] / total) * 100;
+                        backgroundColors.push(getRandomColor(percent));
+                    }
+
+                    var donutData = {
+                        labels: labels,
+                        datasets: [
+                            {
+                                data: values,
+                                backgroundColor: backgroundColors
+                            }
+                        ]
+                    };
+
+                    var donutOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true
+                    };
+
+                    new Chart(donutChartCanvas, {
+                        type: 'doughnut',
+                        data: donutData,
+                        options: donutOptions
+                    });
+                }
+            });
+        });
+
+        function getRandomColor(percent) {
+            var r = Math.floor(Math.random() * 256);
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+            var a = (percent / 100).toFixed(1);
+            return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+        }
+
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Admin/Home/GetNumberOfOrders",
+                success: function (data) {
+                    var dates = [], orderCounts = [];
+
+                    $.each(data, function (index, value) {
+                        // convert datetime to date
+                        var date = new Date(value.Date);
+                        var dateStr = + date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+                        dates.push(dateStr);
+                        orderCounts.push(parseInt(value.OrderCount));
+                    });
+
+                    var chartdata = {
+                        labels: dates,
+                        datasets: [{
+                            label: "Number of Orders",
+                            fill: false,
+                            lineTension: 0.1,
+                            backgroundColor: "rgba(59, 89, 152, 0.75)",
+                            borderColor: "rgba(59, 89, 152, 1)",
+                            pointHoverBackgroundColor: "rgba(59, 89, 152, 1)",
+                            pointHoverBorderColor: "rgba(59, 89, 152, 1)",
+                            data: orderCounts
+                        }]
+                    };
+
+                    var graphTarget = $("#lineChart");
+
+                    var lineGraph = new Chart(graphTarget, {
+                        type: 'line',
+                        data: chartdata,
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        stepSize: 1
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+
+        });
+
+
+
+    </script>
+}
