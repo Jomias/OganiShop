@@ -174,6 +174,7 @@
         });
 
         function Search() {
+            event.preventDefault();
             let temp = '/ShoppingGrid/Index?search=' + $('input[name="search"]').val();
             window.location.href = temp;
         };

@@ -282,6 +282,7 @@
 
 
         function Search1() {
+            event.preventDefault();
             let temp = '/ShoppingGrid/Index?search=' + $('input[name="search1"]').val();
             window.location.href = temp;
         };

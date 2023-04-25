@@ -235,7 +235,8 @@
         });
 
         function Search() {
-            let temp = '/Product/Index?search=' + $('input[name="search"]').val();
+            event.preventDefault();
+            let temp = '/ShoppingGrid/Index?search=' + $('input[name="search"]').val();
             window.location.href = temp;
         };
     </script>
