@@ -1,10 +1,10 @@
 # OganiShop
 
-Web bán nguyên liệu và thực phẩm sử dụng Net Core 3.1
+Web bán nguyên liệu và thực phẩm sử dụng Net Core 6.0
 
 Frontend người dùng: https://themewagon.com/themes/free-bootstrap-4-html5-responsive-ecommerce-website-template-ogani/
 
-Frontend admin: https://adminlte.io/themes/AdminLTE/index2.html
+Frontend admin: Admin LTE
 
 ## Các chức năng
 
